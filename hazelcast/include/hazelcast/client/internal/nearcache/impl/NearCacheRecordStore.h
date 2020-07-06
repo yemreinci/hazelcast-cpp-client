@@ -50,7 +50,7 @@ namespace hazelcast {
                     template<typename K, typename V>
                     class NearCacheRecordStore : public spi::InitializingObject {
                     public:
-                        virtual ~NearCacheRecordStore() {
+                        ~NearCacheRecordStore() override {
                         }
 
                         /**

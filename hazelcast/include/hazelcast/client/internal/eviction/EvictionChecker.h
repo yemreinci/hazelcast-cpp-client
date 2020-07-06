@@ -51,7 +51,7 @@ namespace hazelcast {
                 class HAZELCAST_API EvictAlways : public EvictionChecker {
                 public:
                     //@override
-                    bool isEvictionRequired() const;
+                    bool isEvictionRequired() const override;
                 };
             }
         }

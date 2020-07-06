@@ -37,7 +37,7 @@ namespace hazelcast {
                         class LFUEvictionPolicyComparator : public EvictionPolicyComparator<A, E> {
                         public:
                             //@Override
-                            int compare(const EvictableEntryView<A, E> *e1, const EvictableEntryView<A, E> *e2) const {
+                            int compare(const EvictableEntryView<A, E> *e1, const EvictableEntryView<A, E> *e2) const override {
                                 int64_t hits1 = e1->getAccessHit();
                                 int64_t hits2 = e2->getAccessHit();
                                 if (hits2 < hits1) {

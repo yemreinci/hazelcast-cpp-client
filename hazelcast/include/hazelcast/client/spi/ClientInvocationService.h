@@ -40,7 +40,7 @@ namespace hazelcast {
              */
             class HAZELCAST_API ClientInvocationService : public protocol::IMessageHandler {
             public:
-                virtual ~ClientInvocationService() {
+                ~ClientInvocationService() override {
                 }
 
                 virtual void invokeOnConnection(std::shared_ptr<impl::ClientInvocation> invocation,

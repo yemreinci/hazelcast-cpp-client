@@ -67,15 +67,15 @@ namespace hazelcast {
 
                     class HAZELCAST_API TrueMarkerImpl : public KeyStateMarker {
                     public:
-                        bool tryMark(const serialization::pimpl::Data &key);
+                        bool tryMark(const serialization::pimpl::Data &key) override;
 
-                        bool tryUnmark(const serialization::pimpl::Data &key);
+                        bool tryUnmark(const serialization::pimpl::Data &key) override;
 
-                        bool tryRemove(const serialization::pimpl::Data &key);
+                        bool tryRemove(const serialization::pimpl::Data &key) override;
 
-                        void forceUnmark(const serialization::pimpl::Data &key);
+                        void forceUnmark(const serialization::pimpl::Data &key) override;
 
-                        void init();
+                        void init() override;
                     };
                 }
             }

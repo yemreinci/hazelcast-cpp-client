@@ -54,7 +54,7 @@ namespace hazelcast {
                                 //@Override
                                 int evictInternal(S *sampleableEvictableStore,
                                                   EvictionPolicyEvaluator<MAPKEY, MAPVALUE, A, E> *evictionPolicyEvaluator,
-                                                  EvictionListener<A, E> *evictionListener) {
+                                                  EvictionListener<A, E> *evictionListener) override {
                                     std::unique_ptr<util::Iterable<EvictionCandidate<MAPKEY, MAPVALUE, A, E> > > samples = sampleableEvictableStore->sample(SAMPLE_COUNT);
                                     std::unique_ptr<std::vector<std::shared_ptr<eviction::EvictionCandidate<MAPKEY, MAPVALUE, A, E> > > > evictionCandidates =
                                             evictionPolicyEvaluator->evaluate(*samples);

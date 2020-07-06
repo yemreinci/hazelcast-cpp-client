@@ -36,7 +36,7 @@ namespace hazelcast {
                 template<typename K, typename V>
                 class EvictionPolicyComparator : util::Comparator<EvictableEntryView<K, V> > {
                 public:
-                    virtual ~EvictionPolicyComparator() {
+                    ~EvictionPolicyComparator() override {
                     }
 
                     /**
@@ -69,7 +69,7 @@ namespace hazelcast {
                      * @return the result of comparison
                      */
                     //@Override
-                    virtual int compare(const EvictableEntryView<K, V> *e1, const EvictableEntryView<K, V> *e2) const {
+                    int compare(const EvictableEntryView<K, V> *e1, const EvictableEntryView<K, V> *e2) const override {
                         assert(0);
                         return 0;
                     }

@@ -677,20 +677,20 @@ class Employee : public serialization::IdentifiedDataSerializable {
 public:
     static const int TYPE_ID = 100;
 
-    virtual int getFactoryId() const {
+    int getFactoryId() const override {
         return 1000;
     }
 
-    virtual int getClassId() const {
+    int getClassId() const override {
         return TYPE_ID;
     }
 
-    virtual void writeData(serialization::ObjectDataOutput &writer) const {
+    void writeData(serialization::ObjectDataOutput &writer) const override {
         writer.writeInt(id);
         writer.writeUTF(&name);
     }
 
-    virtual void readData(serialization::ObjectDataInput &reader) {
+    void readData(serialization::ObjectDataInput &reader) override {
         id = reader.readInt();
         name = *reader.readUTF();
     }
@@ -709,7 +709,7 @@ class SampleDataSerializableFactory : public serialization::DataSerializableFact
 public:
     static const int FACTORY_ID = 1000;
 
-    virtual std::auto_ptr<serialization::IdentifiedDataSerializable> create(int32_t classId) {
+    std::auto_ptr<serialization::IdentifiedDataSerializable> create(int32_t classId) override {
         switch (classId) {
             case 100:
                 return std::auto_ptr<serialization::IdentifiedDataSerializable>(new Employee());
@@ -753,21 +753,21 @@ class PortableSerializableSample : public serialization::Portable {
 public:
     static const int CLASS_ID = 1;
 
-    virtual int getFactoryId() const {
+    int getFactoryId() const override {
         return 1;
     }
 
-    virtual int getClassId() const {
+    int getClassId() const override {
         return CLASS_ID;
     }
 
-    virtual void writePortable(serialization::PortableWriter &writer) const {
+    void writePortable(serialization::PortableWriter &writer) const override {
         writer.writeInt("id", id);
         writer.writeUTF("name", &name);
         writer.writeLong("lastOrder", lastOrder);
     }
 
-    virtual void readPortable(serialization::PortableReader &reader) {
+    void readPortable(serialization::PortableReader &reader) override {
         id = reader.readInt("id");
         name = *reader.readUTF("name");
         lastOrder = reader.readLong("lastOrder");
@@ -789,7 +789,7 @@ class SamplePortableFactory : public serialization::PortableFactory {
 public:
     static const int FACTORY_ID = 1;
 
-    virtual std::auto_ptr<serialization::Portable> create(int32_t classId) const {
+    std::auto_ptr<serialization::Portable> create(int32_t classId) const override {
         switch (classId) {
             case 1:
                 return std::auto_ptr<serialization::Portable>(new PortableSerializableSample());
@@ -845,11 +845,11 @@ Let's say your custom `MusicianSerializer` will serialize `Musician`.
 ```C++
 class MusicianSerializer : public serialization::StreamSerializer {
 public:
-    virtual int32_t getHazelcastTypeId() const {
+    int32_t getHazelcastTypeId() const override {
         return 10;
     }
 
-    virtual void write(serialization::ObjectDataOutput &out, const void *object) {
+    void write(serialization::ObjectDataOutput &out, const void *object) override {
         const Musician *csObject = static_cast<const Musician *>(object);
         const std::string &value = csObject->getName();
         int length = (int) value.length();
@@ -861,7 +861,7 @@ public:
         out.write(bytes);
     }
 
-    virtual void *read(serialization::ObjectDataInput &in) {
+    void *read(serialization::ObjectDataInput &in) override {
         int32_t len = in.readInt();
         std::ostringstream value;
         for (int i = 0; i < len; ++i) {
@@ -940,15 +940,15 @@ A sample global serializer that integrates with a third party serializer is show
 ```C++
 class GlobalSerializer : public serialization::StreamSerializer {
 public:
-    virtual int32_t getHazelcastTypeId() const {
+    int32_t getHazelcastTypeId() const override  {
         return 20;
     }
 
-    virtual void write(serialization::ObjectDataOutput &out, const void *object) {
+    void write(serialization::ObjectDataOutput &out, const void *object) override {
         // out.write(MyFavoriteSerializer.serialize(object))
     }
 
-    virtual void *read(serialization::ObjectDataInput &in) {
+    void *read(serialization::ObjectDataInput &in) override {
         // return MyFavoriteSerializer.deserialize(in);
         return NULL;
     }
@@ -1402,7 +1402,7 @@ You can also provide a callback instance to the future using the `andThen` metho
  */
 class PrinterCallback : public hazelcast::client::ExecutionCallback<std::string> {
 public:
-    virtual void onResponse(const boost::shared_ptr<std::string> &response) {
+    void onResponse(const boost::shared_ptr<std::string> &response) override {
         std::cout << "Response was received. ";
         if (response.get()) {
             std::cout << "Received response is : " << *response << std::endl;
@@ -1411,7 +1411,7 @@ public:
         }
     }
 
-    virtual void onFailure(const boost::shared_ptr<exception::IException> &e) {
+    void onFailure(const boost::shared_ptr<exception::IException> &e) override {
         std::cerr << "A failure occured. The exception is:" << e << std::endl;
     }
 };
@@ -1565,17 +1565,17 @@ However, you can also use `ICompletableFuture` to get notified when the operatio
 
 Please see the below code as an example of when you want to get notified when a batch of reads has completed.
 
-```
+```C++
     class ItemsPrinter : public ExecutionCallback<hazelcast::client::ringbuffer::ReadResultSet<std::string> > {
     public:
-        virtual void onResponse(const boost::optional<ringbuffer::ReadResultSet<std::string> > &response) {
+        void onResponse(const boost::optional<ringbuffer::ReadResultSet<std::string> > &response) override {
             DataArray<std::string> &items = response->getItems();
             for (size_t i = 0; i < items.size(); ++i) {
                 std::cout << "Received " << items.get(i) << std::endl;
             }
         }
     
-        virtual void onFailure(const boost::shared_ptr<exception::IException> &e) {
+        void onFailure(const boost::shared_ptr<exception::IException> &e) override {
             std::cout << "An error occured " << e << std::endl;
         }
     };
@@ -1603,10 +1603,10 @@ public:
     MyListener(int64_t sequence) : startSequence(sequence), lastReceivedSequence(-1) {
     }
 
-    virtual ~MyListener() {
+    ~MyListener() override {
     }
 
-    virtual void onMessage(std::auto_ptr<hazelcast::client::topic::Message<std::string> > message) {
+    void onMessage(std::auto_ptr<hazelcast::client::topic::Message<std::string> > message) override {
 
         const std::string *object = message->getMessageObject();
         if (NULL != object) {
@@ -1618,19 +1618,19 @@ public:
         }
     }
 
-    virtual int64_t retrieveInitialSequence() const {
+    int64_t retrieveInitialSequence() const override {
         return startSequence;
     }
 
-    virtual void storeSequence(int64_t sequence) {
+    void storeSequence(int64_t sequence) override {
         lastReceivedSequence = sequence;
     }
 
-    virtual bool isLossTolerant() const {
+    bool isLossTolerant() const override {
         return false;
     }
 
-    virtual bool isTerminal(const hazelcast::client::exception::IException &failure) const {
+    bool isTerminal(const hazelcast::client::exception::IException &failure) const override {
         return false;
     }
     
@@ -1760,7 +1760,7 @@ The following example demonstrates both initial and regular membership listener 
 ```C++
         class MyInitialMemberListener : public hazelcast::client::InitialMembershipListener {
         public:
-            void init(const hazelcast::client::InitialMembershipEvent &event) {
+            void init(const hazelcast::client::InitialMembershipEvent &event) override {
                 std::vector<hazelcast::client::Member> members = event.getMembers();
                 std::cout << "The following are the initial members in the cluster:" << std::endl;
                 for (std::vector<hazelcast::client::Member>::const_iterator it = members.begin(); it != members.end(); ++it) {
@@ -1768,18 +1768,18 @@ The following example demonstrates both initial and regular membership listener 
                 }
             }
         
-            void memberAdded(const hazelcast::client::MembershipEvent &membershipEvent) {
+            void memberAdded(const hazelcast::client::MembershipEvent &membershipEvent) override {
                 std::cout << "[MyInitialMemberListener::memberAdded] New member joined:" <<
                 membershipEvent.getMember().getAddress() <<
                 std::endl;
             }
         
-            void memberRemoved(const hazelcast::client::MembershipEvent &membershipEvent) {
+            void memberRemoved(const hazelcast::client::MembershipEvent &membershipEvent) override {
                 std::cout << "[MyInitialMemberListener::memberRemoved] Member left:" <<
                 membershipEvent.getMember().getAddress() << std::endl;
             }
         
-            void memberAttributeChanged(const hazelcast::client::MemberAttributeEvent &memberAttributeEvent) {
+            void memberAttributeChanged(const hazelcast::client::MemberAttributeEvent &memberAttributeEvent) override {
                 std::cout << "[MyInitialMemberListener::memberAttributeChanged] Member attribute:" <<
                 memberAttributeEvent.getKey()
                 << " changed. Value:" << memberAttributeEvent.getValue() << " for member:" <<

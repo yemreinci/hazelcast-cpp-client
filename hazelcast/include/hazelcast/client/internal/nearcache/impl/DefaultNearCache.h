@@ -53,11 +53,11 @@ namespace hazelcast {
                                   serializationService(ss), logger(logger) {
                         }
 
-                        virtual ~DefaultNearCache() {
+                        ~DefaultNearCache() override {
                         }
 
                         //@Override
-                        void initialize() {
+                        void initialize() override {
                             if (nearCacheRecordStore.get() == NULL) {
                                 nearCacheRecordStore = createNearCacheRecordStore(name, nearCacheConfig);
                             }
@@ -67,19 +67,19 @@ namespace hazelcast {
                         }
 
                         //@Override
-                        const std::string &getName() const {
+                        const std::string &getName() const override {
                             return name;
                         }
 
                         //@Override
-                        std::shared_ptr<V> get(const std::shared_ptr<KS> &key) {
+                        std::shared_ptr<V> get(const std::shared_ptr<KS> &key) override {
                             util::Preconditions::checkNotNull(key, "key cannot be null on get!");
 
                             return nearCacheRecordStore->get(key);
                         }
 
                         //@Override
-                        void put(const std::shared_ptr<KS> &key, const std::shared_ptr<V> &value) {
+                        void put(const std::shared_ptr<KS> &key, const std::shared_ptr<V> &value) override {
                             util::Preconditions::checkNotNull<KS>(key, "key cannot be null on put!");
 
                             nearCacheRecordStore->doEvictionIfRequired();
@@ -99,24 +99,24 @@ namespace hazelcast {
                         }
 */
 
-                        bool invalidate(const std::shared_ptr<KS> &key) {
+                        bool invalidate(const std::shared_ptr<KS> &key) override {
                             util::Preconditions::checkNotNull<KS>(key, "key cannot be null on invalidate!");
 
                             return nearCacheRecordStore->invalidate(key);
                         }
 
                         //@Override
-                        bool isInvalidatedOnChange() const {
+                        bool isInvalidatedOnChange() const override {
                             return nearCacheConfig.isInvalidateOnChange();
                         }
 
                         //@Override
-                        void clear() {
+                        void clear() override {
                             nearCacheRecordStore->clear();
                         }
 
                         //@Override
-                        void destroy() {
+                        void destroy() override {
                             expiration_cancelled_.store(true);
                             if (expirationTimer) {
                                 boost::system::error_code ignored;
@@ -126,7 +126,7 @@ namespace hazelcast {
                         }
 
                         //@Override
-                        const client::config::InMemoryFormat getInMemoryFormat() const {
+                        const client::config::InMemoryFormat getInMemoryFormat() const override {
                             return nearCacheConfig.getInMemoryFormat();
                         }
 
@@ -135,12 +135,12 @@ namespace hazelcast {
                          *
                          * @return the {@link com.hazelcast.monitor.NearCacheStats} instance to monitor this store
                          */
-                        std::shared_ptr<monitor::NearCacheStats> getNearCacheStats() const {
+                        std::shared_ptr<monitor::NearCacheStats> getNearCacheStats() const override {
                             return nearCacheRecordStore->getNearCacheStats();
                         }
 
                         //@Override
-                        int size() const {
+                        int size() const override {
                             return nearCacheRecordStore->size();
                         }
 

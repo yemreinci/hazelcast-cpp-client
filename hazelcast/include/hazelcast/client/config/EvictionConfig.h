@@ -42,7 +42,7 @@ namespace hazelcast {
             template<typename K, typename V>
             class EvictionConfig : public internal::eviction::EvictionConfiguration<K, V> {
             public:
-                virtual ~EvictionConfig() {
+                ~EvictionConfig() override {
                 }
 
                 /**
@@ -129,7 +129,7 @@ namespace hazelcast {
                     return *this;
                 }
 
-                const std::shared_ptr<internal::eviction::EvictionPolicyComparator<K, V> > getComparator() const {
+                const std::shared_ptr<internal::eviction::EvictionPolicyComparator<K, V> > getComparator() const override {
                     return comparator;
                 }
 
@@ -139,12 +139,12 @@ namespace hazelcast {
                     return *this;
                 }
 
-                internal::eviction::EvictionStrategyType::Type getEvictionStrategyType() const {
+                internal::eviction::EvictionStrategyType::Type getEvictionStrategyType() const override {
                     // TODO: add support for other/custom eviction strategies
                     return internal::eviction::EvictionStrategyType::DEFAULT_EVICTION_STRATEGY;
                 }
 
-                internal::eviction::EvictionPolicyType getEvictionPolicyType() const {
+                internal::eviction::EvictionPolicyType getEvictionPolicyType() const override {
                     if (evictionPolicy == LFU) {
                         return internal::eviction::LFU;
                     } else if (evictionPolicy == LRU) {

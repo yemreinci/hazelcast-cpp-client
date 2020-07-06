@@ -56,7 +56,7 @@ namespace hazelcast {
                              */
                             //@Override
                             int evict(S *evictableStore, EvictionPolicyEvaluator<MAPKEY, MAPVALUE, A, E> *evictionPolicyEvaluator,
-                                      EvictionChecker *evictionChecker, EvictionListener<A, E> *evictionListener) {
+                                      EvictionChecker *evictionChecker, EvictionListener<A, E> *evictionListener) override {
                                 if (evictionChecker != NULL) {
                                     if (evictionChecker->isEvictionRequired()) {
                                         return evictInternal(evictableStore, evictionPolicyEvaluator, evictionListener);

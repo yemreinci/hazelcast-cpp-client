@@ -40,10 +40,10 @@ public:
     ServerFactoryEnvironment() {
     }
 
-    void SetUp() {
+    void SetUp() override {
     }
 
-    void TearDown() {
+    void TearDown() override {
         delete hazelcast::client::test::g_srvFactory;
     }
 };

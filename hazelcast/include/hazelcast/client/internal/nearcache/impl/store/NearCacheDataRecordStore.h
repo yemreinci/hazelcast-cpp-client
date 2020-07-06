@@ -48,7 +48,7 @@ namespace hazelcast {
                             }
                         protected:
                             //@Override
-                        virtual int64_t getKeyStorageMemoryCost(KS *key) const {
+                        int64_t getKeyStorageMemoryCost(KS *key) const override {
                                 return
                                     // reference to this key data inside map ("store" field)
                                         REFERENCE_SIZE
@@ -57,7 +57,7 @@ namespace hazelcast {
                             }
 
                             //@Override
-                            virtual int64_t getRecordStorageMemoryCost(record::NearCacheDataRecord *record) const {
+                            int64_t getRecordStorageMemoryCost(record::NearCacheDataRecord *record) const override {
                                 if (record == NULL) {
                                     return 0L;
                                 }
@@ -79,7 +79,7 @@ namespace hazelcast {
 
                             //@Override
                             std::unique_ptr<record::NearCacheDataRecord> valueToRecord(
-                                    const std::shared_ptr<serialization::pimpl::Data> &value) {
+                                    const std::shared_ptr<serialization::pimpl::Data> &value) override {
                                 return valueToRecordInternal(value);
                             }
 
@@ -93,7 +93,7 @@ namespace hazelcast {
 */
 
                             //@Override
-                            std::shared_ptr<V> recordToValue(const record::NearCacheDataRecord *record) {
+                            std::shared_ptr<V> recordToValue(const record::NearCacheDataRecord *record) override {
                                 const std::shared_ptr<serialization::pimpl::Data> value = record->getValue();
                                 if (value.get() == NULL) {
                                     ANCRS::nearCacheStats->incrementMisses();
@@ -104,7 +104,7 @@ namespace hazelcast {
 
                             //@Override
                             void putToRecord(std::shared_ptr<record::NearCacheDataRecord> &record,
-                                             const std::shared_ptr<V> &value) {
+                                             const std::shared_ptr<V> &value) override {
                                 record->setValue(ANCRS::toData(value));
                             }
                         private:

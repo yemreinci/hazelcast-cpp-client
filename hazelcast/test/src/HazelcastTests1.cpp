@@ -927,7 +927,7 @@ namespace hazelcast {
                               disconnectedLatch(disconnectedLatch), shuttingDownLatch(shuttingDownLatch),
                               shutdownLatch(shutdownLatch) {}
 
-                    virtual void stateChanged(const LifecycleEvent &lifecycleEvent) {
+                    void stateChanged(const LifecycleEvent &lifecycleEvent) override {
                         switch (lifecycleEvent.getState()) {
                             case LifecycleEvent::STARTING:
                                 if (startingLatch) {
@@ -1128,7 +1128,7 @@ namespace hazelcast {
                 MySocketInterceptor(boost::latch &latch1) : interceptorLatch(latch1) {
                 }
 
-                void onConnect(const hazelcast::client::Socket &connectedSocket) {
+                void onConnect(const hazelcast::client::Socket &connectedSocket) override {
                     ASSERT_EQ("127.0.0.1", connectedSocket.getAddress().getHost());
                     ASSERT_NE(0, connectedSocket.getAddress().getPort());
                     interceptorLatch.count_down();
@@ -1307,13 +1307,13 @@ namespace hazelcast {
 
                 }
 
-                void memberAdded(const MembershipEvent &event) {
+                void memberAdded(const MembershipEvent &event) override {
                 }
 
-                void memberRemoved(const MembershipEvent &event) {
+                void memberRemoved(const MembershipEvent &event) override {
                 }
 
-                void memberAttributeChanged(const MemberAttributeEvent &memberAttributeEvent) {
+                void memberAttributeChanged(const MemberAttributeEvent &memberAttributeEvent) override {
                     if (memberAttributeEvent.getOperationType() != MemberAttributeEvent::PUT) {
                         return;
                     }
@@ -1684,23 +1684,23 @@ namespace hazelcast {
                               _memberRemoved(_memberRemoved) {
                     }
 
-                    void init(const InitialMembershipEvent &event) {
+                    void init(const InitialMembershipEvent &event) override {
                         std::vector<Member> const &members = event.getMembers();
                         if (members.size() == 1) {
                             _memberAdded.count_down();
                         }
                     }
 
-                    void memberAdded(const MembershipEvent &event) {
+                    void memberAdded(const MembershipEvent &event) override {
                         _memberAdded.count_down();
                     }
 
-                    void memberRemoved(const MembershipEvent &event) {
+                    void memberRemoved(const MembershipEvent &event) override {
                         _memberRemoved.count_down();
                     }
 
 
-                    void memberAttributeChanged(const MemberAttributeEvent &memberAttributeEvent) {
+                    void memberAttributeChanged(const MemberAttributeEvent &memberAttributeEvent) override {
                         _attributeLatch.count_down();
                     }
 
@@ -1719,15 +1719,15 @@ namespace hazelcast {
                               _memberRemoved(_memberRemoved) {
                     }
 
-                    void memberAdded(const MembershipEvent &event) {
+                    void memberAdded(const MembershipEvent &event) override {
                         _memberAdded.count_down();
                     }
 
-                    void memberRemoved(const MembershipEvent &event) {
+                    void memberRemoved(const MembershipEvent &event) override {
                         _memberRemoved.count_down();
                     }
 
-                    void memberAttributeChanged(const MemberAttributeEvent &memberAttributeEvent) {
+                    void memberAttributeChanged(const MemberAttributeEvent &memberAttributeEvent) override {
                         memberAttributeEvent.getKey();
                         _attributeLatch.count_down();
                     }
@@ -1964,7 +1964,7 @@ namespace hazelcast {
             public:
                 ClientTxnMapTest();
 
-                ~ClientTxnMapTest();
+                ~ClientTxnMapTest() override;
 
             protected:
                 HazelcastServer instance;
@@ -2311,7 +2311,7 @@ namespace hazelcast {
             public:
                 ClientTxnSetTest();
 
-                ~ClientTxnSetTest();
+                ~ClientTxnSetTest() override;
 
             protected:
                 HazelcastServer instance;
@@ -2351,7 +2351,7 @@ namespace hazelcast {
             public:
                 ClientTxnTest();
 
-                ~ClientTxnTest();
+                ~ClientTxnTest() override;
 
             protected:
                 HazelcastServerFactory & hazelcastInstanceFactory;
@@ -2363,7 +2363,7 @@ namespace hazelcast {
 
             class MyLoadBalancer : public impl::AbstractLoadBalancer {
             public:
-                const Member next() {
+                const Member next() override {
                     std::vector<Member> members = getMembers();
                     size_t len = members.size();
                     if (len == 0) {
@@ -2385,13 +2385,13 @@ namespace hazelcast {
                 MyMembershipListener(boost::latch &countDownLatch)
                         : countDownLatch(countDownLatch) {}
 
-                void memberAdded(const MembershipEvent &membershipEvent) {}
+                void memberAdded(const MembershipEvent &membershipEvent) override {}
 
-                void memberRemoved(const MembershipEvent &membershipEvent) {
+                void memberRemoved(const MembershipEvent &membershipEvent) override {
                     countDownLatch.count_down();
                 }
 
-                void memberAttributeChanged(const MemberAttributeEvent& memberAttributeEvent) {}
+                void memberAttributeChanged(const MemberAttributeEvent& memberAttributeEvent) override {}
             private:
                 boost::latch &countDownLatch;
             };
@@ -2574,7 +2574,7 @@ namespace hazelcast {
             class ClientTxnListTest : public ClientTestSupport {
             public:
                 ClientTxnListTest();
-                ~ClientTxnListTest();
+                ~ClientTxnListTest() override;
             protected:
                 HazelcastServer instance;
                 ClientConfig clientConfig;
@@ -2612,7 +2612,7 @@ namespace hazelcast {
             class ClientTxnMultiMapTest : public ClientTestSupport {
             public:
                 ClientTxnMultiMapTest();
-                ~ClientTxnMultiMapTest();
+                ~ClientTxnMultiMapTest() override;
             protected:
                 HazelcastServer instance;
                 HazelcastClient client;
@@ -2687,7 +2687,7 @@ namespace hazelcast {
             class ClientTxnQueueTest : public ClientTestSupport {
             public:
                 ClientTxnQueueTest();
-                ~ClientTxnQueueTest();
+                ~ClientTxnQueueTest() override;
             protected:
                 HazelcastServer instance;
                 HazelcastClient client;
@@ -2918,7 +2918,7 @@ namespace hazelcast {
         namespace test {
             class RuntimeAvailableProcessorsTest : public ::testing::Test {
             protected:
-                virtual void TearDown() {
+                void TearDown() override {
                     RuntimeAvailableProcessors::resetOverride();
                 }
             };

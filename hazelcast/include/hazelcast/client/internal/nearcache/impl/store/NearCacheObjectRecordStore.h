@@ -44,13 +44,13 @@ namespace hazelcast {
                             }
                         protected:
                             //@Override
-                            virtual int64_t getKeyStorageMemoryCost(KS *key) const {
+                            int64_t getKeyStorageMemoryCost(KS *key) const override {
                                 // memory cost for "OBJECT" in memory format is totally not supported, so just return zero
                                 return 0L;
                             }
 
                             //@Override
-                            virtual int64_t getRecordStorageMemoryCost(record::NearCacheObjectRecord<V> *record) const {
+                            int64_t getRecordStorageMemoryCost(record::NearCacheObjectRecord<V> *record) const override {
                                 // memory cost for "OBJECT" in memory format is totally not supported, so just return zero
                                 return 0L;
                             }
@@ -68,12 +68,12 @@ namespace hazelcast {
 
                             //@Override
                             std::unique_ptr<record::NearCacheObjectRecord<V> > valueToRecord(
-                                    const std::shared_ptr<V> &value) {
+                                    const std::shared_ptr<V> &value) override {
                                 return valueToRecordInternal(value);
                             }
 
                             //@Override
-                            std::shared_ptr<V> recordToValue(const record::NearCacheObjectRecord<V> *record) {
+                            std::shared_ptr<V> recordToValue(const record::NearCacheObjectRecord<V> *record) override {
                                 const std::shared_ptr<V> value = record->getValue();
                                 if (value.get() == NULL) {
                                     return std::static_pointer_cast<V>(NearCache<K, V>::NULL_OBJECT);
@@ -83,7 +83,7 @@ namespace hazelcast {
 
                             //@Override
                             void putToRecord(std::shared_ptr<record::NearCacheObjectRecord<V> > &record,
-                                             const std::shared_ptr<V> &value) {
+                                             const std::shared_ptr<V> &value) override {
                                 record->setValue(value);
                             }
 

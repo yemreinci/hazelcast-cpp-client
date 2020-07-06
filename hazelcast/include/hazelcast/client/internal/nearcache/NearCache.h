@@ -85,10 +85,10 @@ namespace hazelcast {
                      */
                     static std::shared_ptr<V> NULL_OBJECT;
 
-                    virtual ~NearCache() {
+                    ~NearCache() override {
                     }
 
-                    void initialize() {
+                    void initialize() override {
                         assert(0);
                     }
 
