@@ -31,7 +31,7 @@ namespace hazelcast {
         */
         class HAZELCAST_API EntryAdapter : public EntryListener {
         public:
-            ~EntryAdapter() override {}
+            ~EntryAdapter() override = default;
 
             void entryAdded(const EntryEvent& event) override {}
 

@@ -176,8 +176,7 @@ namespace hazelcast {
                 cluster(&cluster), member(member), eventType(eventType), members(membersList) {
         }
 
-        MembershipEvent::~MembershipEvent() {
-        }
+        MembershipEvent::~MembershipEvent() = default;
 
         const std::vector<Member> MembershipEvent::getMembers() const {
             return members;
@@ -221,8 +220,7 @@ namespace hazelcast {
             return name;
         }
 
-        MembershipListener::~MembershipListener() {
-        }
+        MembershipListener::~MembershipListener() = default;
 
         const std::string &MembershipListener::getRegistrationId() const {
             return registrationId;
@@ -266,8 +264,7 @@ namespace hazelcast {
             return listener->getRegistrationId();
         }
 
-        InitialMembershipListener::~InitialMembershipListener() {
-        }
+        InitialMembershipListener::~InitialMembershipListener() = default;
 
         bool InitialMembershipListener::shouldRequestInitialMembers() const {
             return true;
@@ -400,8 +397,7 @@ namespace hazelcast {
                 return membersRef;
             }
 
-            AbstractLoadBalancer::~AbstractLoadBalancer() {
-            }
+            AbstractLoadBalancer::~AbstractLoadBalancer() = default;
 
             AbstractLoadBalancer::AbstractLoadBalancer() : cluster(NULL) {
             }

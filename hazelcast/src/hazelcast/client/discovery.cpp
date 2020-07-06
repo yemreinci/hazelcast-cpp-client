@@ -69,8 +69,7 @@ namespace hazelcast {
                                                                                   endpoint(endpoint) {
                 }
 
-                EC2RequestSigner::~EC2RequestSigner() {
-                }
+                EC2RequestSigner::~EC2RequestSigner() = default;
 
                 std::string EC2RequestSigner::sign(const std::unordered_map<std::string, std::string> &attributes) {
                     std::string canonicalRequest = getCanonicalizedRequest(attributes);
@@ -401,8 +400,7 @@ namespace hazelcast {
                     addFilters();
                 }
 
-                DescribeInstances::~DescribeInstances() {
-                }
+                DescribeInstances::~DescribeInstances() = default;
 
                 std::unordered_map<std::string, std::string> DescribeInstances::execute() {
                     std::string signature = rs->sign(attributes);

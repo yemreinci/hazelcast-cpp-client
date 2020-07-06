@@ -53,8 +53,7 @@ namespace hazelcast {
                                   keyStateMarker(new internal::nearcache::impl::KeyStateMarkerImpl(partitionCount)) {
                         }
 
-                        ~InvalidationAwareWrapper() override {
-                        }
+                        ~InvalidationAwareWrapper() override = default;
 
                         //@Override
                         void initialize() override {

@@ -42,8 +42,7 @@ namespace hazelcast {
             template<typename K, typename V>
             class EvictionConfig : public internal::eviction::EvictionConfiguration<K, V> {
             public:
-                ~EvictionConfig() override {
-                }
+                ~EvictionConfig() override = default;
 
                 /**
                  * Maximum Size Policy

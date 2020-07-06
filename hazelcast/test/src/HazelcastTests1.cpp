@@ -1975,8 +1975,7 @@ namespace hazelcast {
             ClientTxnMapTest::ClientTxnMapTest() : instance(*g_srvFactory), client(getNewClient()) {
             }
 
-            ClientTxnMapTest::~ClientTxnMapTest() {
-            }
+            ClientTxnMapTest::~ClientTxnMapTest() = default;
 
             TEST_F(ClientTxnMapTest, testPutGet) {
                 std::string name = "testPutGet";
@@ -2321,7 +2320,7 @@ namespace hazelcast {
             ClientTxnSetTest::ClientTxnSetTest() : instance(*g_srvFactory), client(getNewClient()) {
             }
 
-            ClientTxnSetTest::~ClientTxnSetTest() {}
+            ClientTxnSetTest::~ClientTxnSetTest() = default;
 
             TEST_F(ClientTxnSetTest, testAddRemove) {
                 auto s = client.getSet("testAddRemove");
@@ -2583,7 +2582,7 @@ namespace hazelcast {
 
             ClientTxnListTest::ClientTxnListTest() : instance(*g_srvFactory), client(getNewClient()) {}
 
-            ClientTxnListTest::~ClientTxnListTest() {}
+            ClientTxnListTest::~ClientTxnListTest() = default;
 
             TEST_F(ClientTxnListTest, testAddRemove) {
                 auto l = client.getList("testAddRemove");
@@ -2621,7 +2620,7 @@ namespace hazelcast {
             ClientTxnMultiMapTest::ClientTxnMultiMapTest()
                     : instance(*g_srvFactory), client(getNewClient()) {}
 
-            ClientTxnMultiMapTest::~ClientTxnMultiMapTest() {}
+            ClientTxnMultiMapTest::~ClientTxnMultiMapTest() = default;
 
             TEST_F(ClientTxnMultiMapTest, testRemoveIfExists) {
                 TransactionContext context = client.newTransactionContext();
@@ -2695,7 +2694,7 @@ namespace hazelcast {
 
             ClientTxnQueueTest::ClientTxnQueueTest() : instance(*g_srvFactory), client(getNewClient()) {}
 
-            ClientTxnQueueTest::~ClientTxnQueueTest() {}
+            ClientTxnQueueTest::~ClientTxnQueueTest() = default;
 
             TEST_F(ClientTxnQueueTest, testTransactionalOfferPoll1) {
                 std::string name = "defQueue";

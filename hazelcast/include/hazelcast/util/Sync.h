@@ -34,8 +34,7 @@ namespace hazelcast {
             Sync(const T &v) : v(v) {
             }
 
-            virtual ~Sync() {
-            }
+            virtual ~Sync() = default;
 
             T operator--(int) {
                 std::lock_guard<std::mutex> lockGuard(mutex);

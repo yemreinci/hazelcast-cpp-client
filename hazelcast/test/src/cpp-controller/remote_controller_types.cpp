@@ -47,8 +47,7 @@ std::string to_string(const Lang::type& val) {
 }
 
 
-Cluster::~Cluster() noexcept {
-}
+Cluster::~Cluster() noexcept = default;
 
 
 void Cluster::__set_id(const std::string& val) {
@@ -139,8 +138,7 @@ void Cluster::printTo(std::ostream& out) const {
 }
 
 
-Member::~Member() noexcept {
-}
+Member::~Member() noexcept = default;
 
 
 void Member::__set_uuid(const std::string& val) {
@@ -271,8 +269,7 @@ void Member::printTo(std::ostream& out) const {
 }
 
 
-Response::~Response() noexcept {
-}
+Response::~Response() noexcept = default;
 
 
 void Response::__set_success(const bool val) {
@@ -403,8 +400,7 @@ void Response::printTo(std::ostream& out) const {
 }
 
 
-ServerException::~ServerException() noexcept {
-}
+ServerException::~ServerException() noexcept = default;
 
 
 void ServerException::__set_message(const std::string& val) {

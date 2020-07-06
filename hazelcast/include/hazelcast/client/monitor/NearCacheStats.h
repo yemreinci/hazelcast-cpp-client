@@ -30,8 +30,7 @@ namespace hazelcast {
         namespace monitor {
             class HAZELCAST_API LocalInstanceStats {
             public:
-                virtual ~LocalInstanceStats() {
-                }
+                virtual ~LocalInstanceStats() = default;
 
                 /**
                  * Fill a stat value with this if it is not available

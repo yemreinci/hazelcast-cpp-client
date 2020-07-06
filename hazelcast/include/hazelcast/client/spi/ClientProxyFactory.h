@@ -37,7 +37,7 @@ namespace hazelcast {
              */
             class HAZELCAST_API ClientProxyFactory {
             public:
-                virtual ~ClientProxyFactory() { }
+                virtual ~ClientProxyFactory() = default;
 
                 /**
                  * Creates a new client proxy with the given id.

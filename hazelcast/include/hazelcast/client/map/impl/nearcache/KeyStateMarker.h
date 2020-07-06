@@ -44,7 +44,7 @@ namespace hazelcast {
                      */
                     class HAZELCAST_API KeyStateMarker {
                     public:
-                        virtual ~KeyStateMarker() {}
+                        virtual ~KeyStateMarker() = default;
 
                         virtual bool tryMark(const serialization::pimpl::Data &key) = 0;
 

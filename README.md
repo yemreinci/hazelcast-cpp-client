@@ -824,8 +824,7 @@ public:
 
     Musician(const std::string &name) : name(name) {}
 
-    virtual ~Musician() {
-    }
+    virtual ~Musician() = default;
 
     const std::string &getName() const {
         return name;

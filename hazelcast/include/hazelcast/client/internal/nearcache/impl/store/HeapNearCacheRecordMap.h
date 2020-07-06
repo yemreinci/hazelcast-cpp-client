@@ -51,8 +51,7 @@ namespace hazelcast {
                                       serializationService(ss) {
                             }
 
-                            ~HeapNearCacheRecordMap() override {
-                            }
+                            ~HeapNearCacheRecordMap() override = default;
 
                             class NearCacheEvictableSamplingEntry
                                     : public util::SampleableConcurrentHashMap<K, V, KS, R>::SamplingEntry,
@@ -66,8 +65,7 @@ namespace hazelcast {
                                           serializationService(ss) {
                                 }
 
-                                ~NearCacheEvictableSamplingEntry() override {
-                                }
+                                ~NearCacheEvictableSamplingEntry() override = default;
 
                                 //@Override
                                 std::shared_ptr<KS> getAccessor() const override {

@@ -885,8 +885,7 @@ namespace hazelcast {
                     addAddress(Address(g_srvFactory->getServerAddress(), 5701));
                 }
 
-                virtual ~MapClientConfig() {
-                }
+                virtual ~MapClientConfig() = default;
             };
 
             class NearCachedDataMapClientConfig : public MapClientConfig {

@@ -52,7 +52,7 @@ namespace hazelcast {
                      */
                     virtual bool select(const Member &member) const = 0;
 
-                    virtual ~MemberSelector(){};
+                    virtual ~MemberSelector() = default;
 
                     virtual void toString(std::ostream &os) const = 0;
 

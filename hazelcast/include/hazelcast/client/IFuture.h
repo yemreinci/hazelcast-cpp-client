@@ -48,8 +48,7 @@ namespace hazelcast {
         template<typename V>
         class IFuture {
         public:
-            virtual ~IFuture() {
-            }
+            virtual ~IFuture() = default;
 
             /**
              * Attempts to cancel execution of this task.  This attempt will

@@ -53,8 +53,7 @@ namespace hazelcast {
                                   serializationService(ss), logger(logger) {
                         }
 
-                        ~DefaultNearCache() override {
-                        }
+                        ~DefaultNearCache() override = default;
 
                         //@Override
                         void initialize() override {

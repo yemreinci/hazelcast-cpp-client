@@ -85,8 +85,7 @@ namespace hazelcast {
                      */
                     static std::shared_ptr<V> NULL_OBJECT;
 
-                    ~NearCache() override {
-                    }
+                    ~NearCache() override = default;
 
                     void initialize() override {
                         assert(0);
