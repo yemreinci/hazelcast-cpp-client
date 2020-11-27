@@ -15,7 +15,8 @@ jobs:
 
       - name: Run clang-format
         run: |
+          cd $GITHUB_WORKSPACE && \
           clang-format --dry-run -Werror \
-            $(find $GITHUB_WORKSPACE | \
+            $(find . | \
               grep -E "\.(cpp|h)$" | \
               grep -v "generated-sources|cpp-controller")
