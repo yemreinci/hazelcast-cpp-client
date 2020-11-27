@@ -15,7 +15,9 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast::client::hazelcast_client hz;
 
     auto rb = hz.get_ringbuffer("myringbuffer");
@@ -33,7 +35,8 @@ int main() {
     auto val = rb->read_one<std::string>(sequenceNumber).get();
 
     if (val) {
-        std::cout << "The item at read at sequence " << sequenceNumber << " is " << *val << std::endl;
+        std::cout << "The item at read at sequence " << sequenceNumber << " is " << *val
+                  << std::endl;
     }
 
     std::cout << "Finished" << std::endl;

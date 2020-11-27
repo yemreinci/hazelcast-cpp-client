@@ -18,27 +18,25 @@
 
 #include <vector>
 
-#include "hazelcast/util/hazelcast_dll.h"
 #include "hazelcast/client/address.h"
+#include "hazelcast/util/hazelcast_dll.h"
 
 namespace hazelcast {
-    namespace client {
-        namespace connection {
-            /**
-             * Provides initial addresses for client to find and connect to a node
-             */
-            class HAZELCAST_API AddressProvider {
-            public:
-                /**
-                 * @return The possible member addresses to connect to.
-                 */
-                virtual std::vector<address> load_addresses() = 0;
+namespace client {
+namespace connection {
+/**
+ * Provides initial addresses for client to find and connect to a node
+ */
+class HAZELCAST_API AddressProvider
+{
+public:
+    /**
+     * @return The possible member addresses to connect to.
+     */
+    virtual std::vector<address> load_addresses() = 0;
 
-                virtual ~AddressProvider() = default;
-            };
-        }
-    }
-}
-
-
-
+    virtual ~AddressProvider() = default;
+};
+} // namespace connection
+} // namespace client
+} // namespace hazelcast

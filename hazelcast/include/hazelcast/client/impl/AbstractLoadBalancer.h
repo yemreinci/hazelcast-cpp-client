@@ -15,50 +15,48 @@
  */
 #pragma once
 
-#include "hazelcast/client/member.h"
 #include "hazelcast/client/load_balancer.h"
+#include "hazelcast/client/member.h"
 #include <mutex>
 
 #include <vector>
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export	
-#endif 
+#pragma warning(disable : 4251) // for dll export
+#endif
 
 namespace hazelcast {
-    namespace client {
-        class cluster;
+namespace client {
+class cluster;
 
-        namespace impl {
-            class HAZELCAST_API AbstractLoadBalancer : public load_balancer {
-            public:
-                AbstractLoadBalancer();
+namespace impl {
+class HAZELCAST_API AbstractLoadBalancer : public load_balancer
+{
+public:
+    AbstractLoadBalancer();
 
-                AbstractLoadBalancer(const AbstractLoadBalancer &rhs);
+    AbstractLoadBalancer(const AbstractLoadBalancer& rhs);
 
-                void operator=(const AbstractLoadBalancer &rhs);
+    void operator=(const AbstractLoadBalancer& rhs);
 
-                void set_members_ref();
+    void set_members_ref();
 
-                std::vector<member> get_members();
+    std::vector<member> get_members();
 
-                void init(cluster &cluster) override;
+    void init(cluster& cluster) override;
 
-                ~AbstractLoadBalancer() override;
+    ~AbstractLoadBalancer() override;
 
-            private:
-                mutable std::mutex members_lock_;
-                std::vector<member> members_ref_;
-                cluster *cluster_;
-            };
-        }
-    }
-}
+private:
+    mutable std::mutex members_lock_;
+    std::vector<member> members_ref_;
+    cluster* cluster_;
+};
+} // namespace impl
+} // namespace client
+} // namespace hazelcast
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
-#endif 
-
-
-
+#endif

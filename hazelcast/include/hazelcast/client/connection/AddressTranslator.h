@@ -18,40 +18,39 @@
 
 #include "hazelcast/client/address.h"
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export
-#pragma warning(disable: 4003) //for  not enough actual parameters for macro 'min' in asio wait_traits
+#pragma warning(disable : 4251) // for dll export
+#pragma warning(                                                                                   \
+  disable : 4003) // for  not enough actual parameters for macro 'min' in asio wait_traits
 #endif
 
 namespace hazelcast {
-    namespace client {
-        namespace connection {
-            class HAZELCAST_API AddressTranslator {
-            public:
-                virtual ~AddressTranslator() = default;
+namespace client {
+namespace connection {
+class HAZELCAST_API AddressTranslator
+{
+public:
+    virtual ~AddressTranslator() = default;
 
-                /**
-                 * Translates the given address to another address specific to
-                 * network or service
-                 *
-                 * @param address
-                 * @return new address if given address is known, otherwise return null
-                 */
-                virtual address translate(const address &address) = 0;
+    /**
+     * Translates the given address to another address specific to
+     * network or service
+     *
+     * @param address
+     * @return new address if given address is known, otherwise return null
+     */
+    virtual address translate(const address& address) = 0;
 
-                /**
-                 * Refreshes the internal lookup table if necessary.
-                 */
-                virtual void refresh() = 0;
-            };
-        }
-    }
-}
+    /**
+     * Refreshes the internal lookup table if necessary.
+     */
+    virtual void refresh() = 0;
+};
+} // namespace connection
+} // namespace client
+} // namespace hazelcast
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif
-
-
-

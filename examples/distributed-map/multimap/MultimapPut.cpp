@@ -15,7 +15,9 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast::client::hazelcast_client hz;
 
     auto map = hz.get_multi_map("map");

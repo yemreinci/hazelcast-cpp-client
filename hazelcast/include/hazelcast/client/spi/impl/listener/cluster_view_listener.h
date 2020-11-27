@@ -20,51 +20,54 @@
 #include <hazelcast/client/protocol/codec/codecs.h>
 
 namespace hazelcast {
-    namespace client {
-        namespace spi {
-            namespace impl {
-                namespace listener {
-                    class cluster_view_listener
-                            : public connection::ConnectionListener,
-                              public std::enable_shared_from_this<cluster_view_listener> {
-                    public:
-                        cluster_view_listener(ClientContext &client_context);
+namespace client {
+namespace spi {
+namespace impl {
+namespace listener {
+class cluster_view_listener
+  : public connection::ConnectionListener
+  , public std::enable_shared_from_this<cluster_view_listener>
+{
+public:
+    cluster_view_listener(ClientContext& client_context);
 
-                        virtual ~cluster_view_listener();
+    virtual ~cluster_view_listener();
 
-                        void start();
+    void start();
 
-                        virtual void connection_added(const std::shared_ptr<connection::Connection> connection);
+    virtual void connection_added(const std::shared_ptr<connection::Connection> connection);
 
-                        virtual void connection_removed(const std::shared_ptr<connection::Connection> connection);
+    virtual void connection_removed(const std::shared_ptr<connection::Connection> connection);
 
-                    private:
-                        struct event_handler : public protocol::codec::client_addclusterviewlistener_handler {
-                            event_handler(const std::shared_ptr <connection::Connection> &connection,
-                                          cluster_view_listener &view_listener);
+private:
+    struct event_handler : public protocol::codec::client_addclusterviewlistener_handler
+    {
+        event_handler(const std::shared_ptr<connection::Connection>& connection,
+                      cluster_view_listener& view_listener);
 
-                            virtual void before_listener_register();
+        virtual void before_listener_register();
 
-                            virtual void on_listener_register();
+        virtual void on_listener_register();
 
-                            virtual void
-                            handle_membersview(int32_t version, const std::vector<member> &member_infos);
+        virtual void handle_membersview(int32_t version, const std::vector<member>& member_infos);
 
-                            virtual void handle_partitionsview(int32_t version,
-                                                               const std::vector<std::pair<boost::uuids::uuid, std::vector<int>>> &partitions);
+        virtual void handle_partitionsview(
+          int32_t version,
+          const std::vector<std::pair<boost::uuids::uuid, std::vector<int>>>& partitions);
 
-                            std::shared_ptr<connection::Connection> connection;
-                            cluster_view_listener &view_listener;
-                        };
+        std::shared_ptr<connection::Connection> connection;
+        cluster_view_listener& view_listener;
+    };
 
-                        void try_register(std::shared_ptr<connection::Connection> connection);
-                        void try_reregister_to_random_connection(std::shared_ptr<connection::Connection> old_connection);
+    void try_register(std::shared_ptr<connection::Connection> connection);
+    void try_reregister_to_random_connection(
+      std::shared_ptr<connection::Connection> old_connection);
 
-                        spi::ClientContext &client_context_;
-                        std::atomic<connection::Connection *> listener_added_connection_;
-                    };
-                }
-            }
-        }
-    }
-}
+    spi::ClientContext& client_context_;
+    std::atomic<connection::Connection*> listener_added_connection_;
+};
+} // namespace listener
+} // namespace impl
+} // namespace spi
+} // namespace client
+} // namespace hazelcast

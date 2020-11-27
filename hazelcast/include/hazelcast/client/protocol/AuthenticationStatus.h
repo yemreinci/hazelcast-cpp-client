@@ -18,15 +18,14 @@
 #include "hazelcast/util/hazelcast_dll.h"
 
 namespace hazelcast {
-    namespace client {
-        namespace protocol {
-            enum HAZELCAST_API authentication_status {
-                AUTHENTICATED = 0,
-                CREDENTIALS_FAILED = 1,
-                SERIALIZATION_VERSION_MISMATCH = 2
-            };
-        }
-    }
+namespace client {
+namespace protocol {
+enum HAZELCAST_API authentication_status
+{
+    AUTHENTICATED = 0,
+    CREDENTIALS_FAILED = 1,
+    SERIALIZATION_VERSION_MISMATCH = 2
+};
 }
-
-
+} // namespace client
+} // namespace hazelcast

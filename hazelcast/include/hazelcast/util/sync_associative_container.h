@@ -21,43 +21,42 @@
 #include "hazelcast/util/hazelcast_dll.h"
 #include <mutex>
 
-
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export
+#pragma warning(disable : 4251) // for dll export
 #endif
 
 namespace hazelcast {
-    namespace util {
+namespace util {
 
-        template <typename Container>
-        class sync_associative_container  {
-        public:
-            std::pair<typename Container::iterator, bool> insert(const typename Container::key_type &key) {
-                std::lock_guard<std::mutex> g(lock_);
-                return container_.insert(key);
-            }
-            typename Container::size_type erase( const typename Container::key_type& key) {
-                std::lock_guard<std::mutex> g(lock_);
-                return container_.erase(key);
-            }
-            template< class... Args >
-            std::pair<typename Container::iterator, bool> emplace(Args&&... args) {
-                std::lock_guard<std::mutex> g(lock_);
-                return container_.emplace(std::forward<Args>(args)...);
-            }
-        private:
-            Container container_;
-            std::mutex lock_;
-        };
+template<typename Container>
+class sync_associative_container
+{
+public:
+    std::pair<typename Container::iterator, bool> insert(const typename Container::key_type& key)
+    {
+        std::lock_guard<std::mutex> g(lock_);
+        return container_.insert(key);
     }
-}
+    typename Container::size_type erase(const typename Container::key_type& key)
+    {
+        std::lock_guard<std::mutex> g(lock_);
+        return container_.erase(key);
+    }
+    template<class... Args>
+    std::pair<typename Container::iterator, bool> emplace(Args&&... args)
+    {
+        std::lock_guard<std::mutex> g(lock_);
+        return container_.emplace(std::forward<Args>(args)...);
+    }
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+private:
+    Container container_;
+    std::mutex lock_;
+};
+} // namespace util
+} // namespace hazelcast
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif
-
-
-
-
-

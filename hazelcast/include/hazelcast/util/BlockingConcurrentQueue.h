@@ -15,101 +15,108 @@
  */
 #pragma once
 
-#include <list>
-#include <iostream>
-#include <mutex>
 #include <condition_variable>
+#include <iostream>
+#include <list>
+#include <mutex>
 
-#include "hazelcast/util/hazelcast_dll.h"
 #include "hazelcast/client/exception/protocol_exceptions.h"
+#include "hazelcast/util/hazelcast_dll.h"
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export	
+#pragma warning(disable : 4251) // for dll export
 #endif
 
 namespace hazelcast {
-    namespace util {
-        template <typename T>
-        /* Blocking - synchronized queue */
-        class BlockingConcurrentQueue {
-        public:
-            BlockingConcurrentQueue(size_t max_queue_capacity) : capacity_(max_queue_capacity), is_interrupted_(false) {
-            }
+namespace util {
+template<typename T>
+/* Blocking - synchronized queue */
+class BlockingConcurrentQueue
+{
+public:
+    BlockingConcurrentQueue(size_t max_queue_capacity)
+      : capacity_(max_queue_capacity)
+      , is_interrupted_(false)
+    {}
 
-            void push(const T &e) {
-                std::unique_lock<std::mutex> lock(m_);
-                while (internal_queue_.size() == capacity_) {
-                    if (is_interrupted_) {
-                        throw client::exception::interrupted("BlockingConcurrentQueue::push");
-                    }
-                    // wait on condition
-                    not_full_.wait(lock);
-                }
-                internal_queue_.push_back(e);
-                not_empty_.notify_one();
+    void push(const T& e)
+    {
+        std::unique_lock<std::mutex> lock(m_);
+        while (internal_queue_.size() == capacity_) {
+            if (is_interrupted_) {
+                throw client::exception::interrupted("BlockingConcurrentQueue::push");
             }
-
-            T pop() {
-                std::unique_lock<std::mutex> lock(m_);
-                while (internal_queue_.empty()) {
-                    if (is_interrupted_) {
-                        throw client::exception::interrupted("BlockingConcurrentQueue::pop");
-                    }
-                    // wait for notEmpty condition
-                    not_empty_.wait(lock);
-                }
-                T element = internal_queue_.front();
-                internal_queue_.pop_front();
-                not_full_.notify_one();
-                return element;
-            }
-
-            /**
-             * Removes all of the elements from this collection (optional operation).
-             * The collection will be empty after this method returns.
-             *
-             */
-            void clear() {
-                std::unique_lock<std::mutex> lock(m_);
-                internal_queue_.clear();
-                not_full_.notify_one();
-            }
-
-            void interrupt() {
-                not_full_.notify_one();
-                not_empty_.notify_one();
-                is_interrupted_ = true;
-            }
-
-            bool is_empty() {
-                std::lock_guard<std::mutex> lock(m_);
-                return internal_queue_.empty();
-            }
-
-            size_t size() {
-                std::unique_lock<std::mutex> lock(m_);
-                return internal_queue_.size();
-            }
-
-        private:
-            std::mutex m_;
-            /**
-             * Did not choose std::list which shall give better remove_all performance since deque is more efficient on
-             * offer and poll due to data locality (best would be std::vector but it does not allow pop_front).
-             */
-            std::list<T> internal_queue_;
-            size_t capacity_;
-            std::condition_variable not_full_;
-            std::condition_variable not_empty_;
-            bool is_interrupted_;
-        };
+            // wait on condition
+            not_full_.wait(lock);
+        }
+        internal_queue_.push_back(e);
+        not_empty_.notify_one();
     }
-}
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+    T pop()
+    {
+        std::unique_lock<std::mutex> lock(m_);
+        while (internal_queue_.empty()) {
+            if (is_interrupted_) {
+                throw client::exception::interrupted("BlockingConcurrentQueue::pop");
+            }
+            // wait for notEmpty condition
+            not_empty_.wait(lock);
+        }
+        T element = internal_queue_.front();
+        internal_queue_.pop_front();
+        not_full_.notify_one();
+        return element;
+    }
+
+    /**
+     * Removes all of the elements from this collection (optional operation).
+     * The collection will be empty after this method returns.
+     *
+     */
+    void clear()
+    {
+        std::unique_lock<std::mutex> lock(m_);
+        internal_queue_.clear();
+        not_full_.notify_one();
+    }
+
+    void interrupt()
+    {
+        not_full_.notify_one();
+        not_empty_.notify_one();
+        is_interrupted_ = true;
+    }
+
+    bool is_empty()
+    {
+        std::lock_guard<std::mutex> lock(m_);
+        return internal_queue_.empty();
+    }
+
+    size_t size()
+    {
+        std::unique_lock<std::mutex> lock(m_);
+        return internal_queue_.size();
+    }
+
+private:
+    std::mutex m_;
+    /**
+     * Did not choose std::list which shall give better remove_all performance since deque is more
+     * efficient on offer and poll due to data locality (best would be std::vector but it does not
+     * allow pop_front).
+     */
+    std::list<T> internal_queue_;
+    size_t capacity_;
+    std::condition_variable not_full_;
+    std::condition_variable not_empty_;
+    bool is_interrupted_;
+};
+} // namespace util
+} // namespace hazelcast
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
-#endif 
-
-
-
+#endif

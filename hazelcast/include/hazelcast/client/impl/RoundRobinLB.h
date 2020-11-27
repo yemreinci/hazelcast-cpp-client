@@ -19,42 +19,40 @@
 
 #include "hazelcast/client/impl/AbstractLoadBalancer.h"
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export	
-#endif 
+#pragma warning(disable : 4251) // for dll export
+#endif
 
 namespace hazelcast {
-    namespace client {
+namespace client {
 
-        class member;
+class member;
 
-        class cluster;
+class cluster;
 
-        namespace impl {
+namespace impl {
 
-            class HAZELCAST_API RoundRobinLB : public AbstractLoadBalancer {
-            public:
-                RoundRobinLB();
+class HAZELCAST_API RoundRobinLB : public AbstractLoadBalancer
+{
+public:
+    RoundRobinLB();
 
-                void operator=(const RoundRobinLB &rhs);
+    void operator=(const RoundRobinLB& rhs);
 
-                RoundRobinLB(const RoundRobinLB &rhs);
+    RoundRobinLB(const RoundRobinLB& rhs);
 
-                void init(cluster &cluster) override;
+    void init(cluster& cluster) override;
 
-                boost::optional<member> next() override;
+    boost::optional<member> next() override;
 
-            private:
-                std::atomic<int> index_{ 0 };
-            };
-        }
-    }
-}
+private:
+    std::atomic<int> index_{ 0 };
+};
+} // namespace impl
+} // namespace client
+} // namespace hazelcast
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
-#endif 
-
-
-
+#endif

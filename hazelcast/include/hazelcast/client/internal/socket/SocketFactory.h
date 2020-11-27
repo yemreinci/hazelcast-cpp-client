@@ -26,45 +26,47 @@
 
 #endif // HZ_BUILD_WITH_SSL
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export	
+#pragma warning(disable : 4251) // for dll export
 #endif
 
 namespace hazelcast {
-    namespace client {
-        class hz_socket;
+namespace client {
+class hz_socket;
 
-        class address;
+class address;
 
-        namespace spi {
-            class ClientContext;
-        }
-        namespace internal {
-            namespace socket {
-                class HAZELCAST_API SocketFactory {
-                public:
-                    SocketFactory(spi::ClientContext &client_context, boost::asio::io_context &io,
-                            boost::asio::ip::tcp::resolver &resolver);
-
-                    bool start();
-
-                    std::unique_ptr<hz_socket>
-                    create(const address &address, std::chrono::milliseconds &connect_timeout_in_millis);
-
-                private:
-                    spi::ClientContext &client_context_;
-                    boost::asio::io_context &io_;
-                    boost::asio::ip::tcp::resolver &io_resolver_;
-#ifdef HZ_BUILD_WITH_SSL
-                    std::unique_ptr<boost::asio::ssl::context> ssl_context_;
-#endif
-                };
-            }
-        }
-    }
+namespace spi {
+class ClientContext;
 }
+namespace internal {
+namespace socket {
+class HAZELCAST_API SocketFactory
+{
+public:
+    SocketFactory(spi::ClientContext& client_context,
+                  boost::asio::io_context& io,
+                  boost::asio::ip::tcp::resolver& resolver);
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+    bool start();
+
+    std::unique_ptr<hz_socket> create(const address& address,
+                                      std::chrono::milliseconds& connect_timeout_in_millis);
+
+private:
+    spi::ClientContext& client_context_;
+    boost::asio::io_context& io_;
+    boost::asio::ip::tcp::resolver& io_resolver_;
+#ifdef HZ_BUILD_WITH_SSL
+    std::unique_ptr<boost::asio::ssl::context> ssl_context_;
+#endif
+};
+} // namespace socket
+} // namespace internal
+} // namespace client
+} // namespace hazelcast
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif

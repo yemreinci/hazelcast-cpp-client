@@ -15,7 +15,9 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast::client::hazelcast_client hz;
 
     auto map = hz.get_distributed_object<hazelcast::client::iqueue>("queue distributed object");
@@ -24,4 +26,3 @@ int main() {
 
     return 0;
 }
-

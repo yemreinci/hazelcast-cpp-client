@@ -15,83 +15,85 @@
  */
 #pragma once
 
-#include <memory>
 #include <atomic>
+#include <memory>
 #include <stdint.h>
 #include <thread>
 
-#include "hazelcast/client/ringbuffer.h"
-#include "hazelcast/util/BlockingConcurrentQueue.h"
 #include "hazelcast/client/execution_callback.h"
+#include "hazelcast/client/ringbuffer.h"
 #include "hazelcast/client/topic/impl/reliable/ReliableTopicMessage.h"
+#include "hazelcast/util/BlockingConcurrentQueue.h"
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export
+#pragma warning(disable : 4251) // for dll export
 #endif
 
 namespace hazelcast {
-    namespace client {
-        namespace topic {
-            namespace impl {
-                namespace reliable {
-                    class HAZELCAST_API ReliableTopicExecutor {
-                    public:
-                        enum message_type {
-                            GET_ONE_MESSAGE,
-                            CANCEL
-                        };
+namespace client {
+namespace topic {
+namespace impl {
+namespace reliable {
+class HAZELCAST_API ReliableTopicExecutor
+{
+public:
+    enum message_type
+    {
+        GET_ONE_MESSAGE,
+        CANCEL
+    };
 
-                        struct Message {
-                            message_type type;
-                            int64_t sequence;
-                            int32_t max_count;
-                            std::shared_ptr<execution_callback<rb::read_result_set>> callback;
-                        };
+    struct Message
+    {
+        message_type type;
+        int64_t sequence;
+        int32_t max_count;
+        std::shared_ptr<execution_callback<rb::read_result_set>> callback;
+    };
 
-                        ReliableTopicExecutor(std::shared_ptr<ringbuffer> rb, logger &lg);
+    ReliableTopicExecutor(std::shared_ptr<ringbuffer> rb, logger& lg);
 
-                        virtual ~ReliableTopicExecutor();
+    virtual ~ReliableTopicExecutor();
 
-                        /**
-                         * Not thread safe method
-                         */
-                        void start();
+    /**
+     * Not thread safe method
+     */
+    void start();
 
-                        bool stop();
+    bool stop();
 
-                        void execute(Message m);
+    void execute(Message m);
 
-                    private:
-                        class Task {
-                        public:
-                            Task(std::shared_ptr<ringbuffer> rb, util::BlockingConcurrentQueue<Message> &q,
-                                 std::atomic<bool> &shutdown);
+private:
+    class Task
+    {
+    public:
+        Task(std::shared_ptr<ringbuffer> rb,
+             util::BlockingConcurrentQueue<Message>& q,
+             std::atomic<bool>& shutdown);
 
-                            virtual void run();
+        virtual void run();
 
-                            virtual std::string get_name() const;
+        virtual std::string get_name() const;
 
-                        private:
-                            std::shared_ptr<ringbuffer> rb_;
-                            util::BlockingConcurrentQueue<Message> &q_;
-                            std::atomic<bool> &shutdown_;
-                        };
+    private:
+        std::shared_ptr<ringbuffer> rb_;
+        util::BlockingConcurrentQueue<Message>& q_;
+        std::atomic<bool>& shutdown_;
+    };
 
-                        std::shared_ptr<ringbuffer> ringbuffer_;
-                        std::thread runner_thread_;
-                        util::BlockingConcurrentQueue<Message> q_;
-                        std::atomic<bool> shutdown_;
-                    };
-                }
-            }
-        }
-    }
-}
+    std::shared_ptr<ringbuffer> ringbuffer_;
+    std::thread runner_thread_;
+    util::BlockingConcurrentQueue<Message> q_;
+    std::atomic<bool> shutdown_;
+};
+} // namespace reliable
+} // namespace impl
+} // namespace topic
+} // namespace client
+} // namespace hazelcast
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif
-
-
-

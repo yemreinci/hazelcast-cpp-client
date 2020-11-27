@@ -16,7 +16,9 @@
 
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast_client hz;
 
     // Get an atomic_reference named 'my-ref'

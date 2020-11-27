@@ -18,21 +18,26 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast::client::client_config config;
     hazelcast::client::address serverAddress("127.0.0.1", 5701);
     config.get_network_config().add_address(serverAddress);
 
-    config.get_network_config().get_ssl_config().
-            set_enabled(true).          // Mandatory setting
-            add_verify_file("MyCAFile"). // Mandatory setting
-            set_cipher_list("HIGH");     // optional setting (values for string are described at
-                                       // https://www.openssl.org/docs/man1.0.2/apps/ciphers.html)
-    
+    config.get_network_config()
+      .get_ssl_config()
+      .set_enabled(true)
+      . // Mandatory setting
+      add_verify_file("MyCAFile")
+      .                        // Mandatory setting
+      set_cipher_list("HIGH"); // optional setting (values for string are described at
+                               // https://www.openssl.org/docs/man1.0.2/apps/ciphers.html)
+
     hazelcast::client::hazelcast_client hz(std::move(config));
 
     auto map = hz.get_map("MyMap");
-    
+
     map->put(1, 100).get();
     map->put(2, 200).get();
 

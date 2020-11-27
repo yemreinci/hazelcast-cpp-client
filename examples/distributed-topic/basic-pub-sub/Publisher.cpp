@@ -15,7 +15,9 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast::client::hazelcast_client hz;
 
     auto topic = hz.get_topic("testtopic");
@@ -26,4 +28,3 @@ int main() {
 
     return 0;
 }
-

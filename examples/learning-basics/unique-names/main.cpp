@@ -15,7 +15,9 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast::client::hazelcast_client hz;
 
     auto flakeIdGenerator = hz.get_flake_id_generator("idGenerator");

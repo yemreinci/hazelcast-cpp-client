@@ -15,19 +15,23 @@
  */
 #pragma once
 
-#include "hazelcast/client/spi/ClientProxy.h"
 #include "hazelcast/client/proxy/SerializingProxy.h"
+#include "hazelcast/client/spi/ClientProxy.h"
 
 namespace hazelcast {
-    namespace client {
-        namespace proxy {
-            class HAZELCAST_API ProxyImpl : public spi::ClientProxy, public SerializingProxy {
-            protected:
-                ProxyImpl(const std::string &service_name, const std::string &object_name, spi::ClientContext *context);
+namespace client {
+namespace proxy {
+class HAZELCAST_API ProxyImpl
+  : public spi::ClientProxy
+  , public SerializingProxy
+{
+protected:
+    ProxyImpl(const std::string& service_name,
+              const std::string& object_name,
+              spi::ClientContext* context);
 
-                ~ProxyImpl() override;
-            };
-        }
-    }
-}
-
+    ~ProxyImpl() override;
+};
+} // namespace proxy
+} // namespace client
+} // namespace hazelcast

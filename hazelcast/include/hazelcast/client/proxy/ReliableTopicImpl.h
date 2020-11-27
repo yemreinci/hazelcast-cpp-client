@@ -14,50 +14,49 @@
  * limitations under the License.
  */
 
-
 #pragma once
 
-#include "hazelcast/client/proxy/ProxyImpl.h"
-#include "hazelcast/client/topic/impl/reliable/ReliableTopicMessage.h"
-#include "hazelcast/client/ringbuffer.h"
-#include "hazelcast/client/topic/reliable_listener.h"
-#include "hazelcast/client/protocol/ClientProtocolErrorCodes.h"
-#include "hazelcast/client/execution_callback.h"
-#include "hazelcast/client/topic/impl/reliable/ReliableTopicExecutor.h"
 #include "hazelcast/client/config/reliable_topic_config.h"
+#include "hazelcast/client/execution_callback.h"
+#include "hazelcast/client/protocol/ClientProtocolErrorCodes.h"
+#include "hazelcast/client/proxy/ProxyImpl.h"
+#include "hazelcast/client/ringbuffer.h"
+#include "hazelcast/client/topic/impl/reliable/ReliableTopicExecutor.h"
+#include "hazelcast/client/topic/impl/reliable/ReliableTopicMessage.h"
+#include "hazelcast/client/topic/reliable_listener.h"
 #include "hazelcast/logger.h"
 
 #include <memory>
 
-#include <string>
 #include <stdint.h>
+#include <string>
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export
+#pragma warning(disable : 4251) // for dll export
 #endif
 
 namespace hazelcast {
-    namespace client {
-        namespace proxy {
-            class HAZELCAST_API ReliableTopicImpl : public proxy::ProxyImpl {
-            protected:
-                static constexpr const char * TOPIC_RB_PREFIX = "_hz_rb_";
+namespace client {
+namespace proxy {
+class HAZELCAST_API ReliableTopicImpl : public proxy::ProxyImpl
+{
+protected:
+    static constexpr const char* TOPIC_RB_PREFIX = "_hz_rb_";
 
-                ReliableTopicImpl(const std::string &instance_name, spi::ClientContext *context);
+    ReliableTopicImpl(const std::string& instance_name, spi::ClientContext* context);
 
-                boost::future<void> publish(serialization::pimpl::data &&data);
-            protected:
-                std::shared_ptr<ringbuffer> ringbuffer_;
-                logger &logger_;
-                const config::reliable_topic_config config_;
-            };
-        }
-    }
-}
+    boost::future<void> publish(serialization::pimpl::data&& data);
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+protected:
+    std::shared_ptr<ringbuffer> ringbuffer_;
+    logger& logger_;
+    const config::reliable_topic_config config_;
+};
+} // namespace proxy
+} // namespace client
+} // namespace hazelcast
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif
-
-

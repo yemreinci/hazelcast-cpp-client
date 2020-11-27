@@ -16,63 +16,61 @@
 
 #pragma once
 
-#include <unordered_map>
 #include <memory>
+#include <unordered_map>
 
-#include "hazelcast/util/hazelcast_dll.h"
 #include "hazelcast/client/member.h"
+#include "hazelcast/util/hazelcast_dll.h"
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export
+#pragma warning(disable : 4251) // for dll export
 #endif
 
 namespace hazelcast {
-    namespace client {
-        /**
-         * MultiExecutionCallback provides notification for when an execution is completed on each member
-         * that a task is submitted to. After all executions are completed on all submitted members,
-         * the {@link #onComplete(std::unordered_map)} method is called with a map of all results.
-         *
-         * @see IExecutorService
-         * @see ExecutionCallback
-         */
-        template<typename V>
-        class multi_execution_callback {
-        public:
-            virtual ~multi_execution_callback() = default;
+namespace client {
+/**
+ * MultiExecutionCallback provides notification for when an execution is completed on each member
+ * that a task is submitted to. After all executions are completed on all submitted members,
+ * the {@link #onComplete(std::unordered_map)} method is called with a map of all results.
+ *
+ * @see IExecutorService
+ * @see ExecutionCallback
+ */
+template<typename V>
+class multi_execution_callback
+{
+public:
+    virtual ~multi_execution_callback() = default;
 
-            /**
-             * Called when an execution is completed on a member.
-             *
-             * @param member member that the task is submitted to.
-             * @param value result of the execution
-             */
-            virtual void on_response(const member &member, const boost::optional<V> &response) = 0;
+    /**
+     * Called when an execution is completed on a member.
+     *
+     * @param member member that the task is submitted to.
+     * @param value result of the execution
+     */
+    virtual void on_response(const member& member, const boost::optional<V>& response) = 0;
 
-            /**
-             * Called when an execution is completed with an exception on a member.
-             *
-             * @param member member that the task is submitted to.
-             * @param exception result of the execution
-             */
-            virtual void on_failure(const member &member, const std::exception_ptr exception) = 0;
+    /**
+     * Called when an execution is completed with an exception on a member.
+     *
+     * @param member member that the task is submitted to.
+     * @param exception result of the execution
+     */
+    virtual void on_failure(const member& member, const std::exception_ptr exception) = 0;
 
-            /**
-             * Called after all executions are completed.
-             *
-             * @param values map of Member-Response pairs where no exception occured.
-             * @param exceptions The exceptions produced by failing members.
-             */
-            virtual void on_complete(const std::unordered_map<member, boost::optional<V> > &values,
-                                    const std::unordered_map<member, std::exception_ptr> &exceptions) = 0;
-        };
-    }
-}
+    /**
+     * Called after all executions are completed.
+     *
+     * @param values map of Member-Response pairs where no exception occured.
+     * @param exceptions The exceptions produced by failing members.
+     */
+    virtual void on_complete(const std::unordered_map<member, boost::optional<V>>& values,
+                             const std::unordered_map<member, std::exception_ptr>& exceptions) = 0;
+};
+} // namespace client
+} // namespace hazelcast
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif
-
-
-

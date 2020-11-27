@@ -15,30 +15,36 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-hazelcast::client::topic::reliable_listener make_listener(std::atomic<int> &n_received_messages, int64_t sequence_id = -1) {
+hazelcast::client::topic::reliable_listener
+make_listener(std::atomic<int>& n_received_messages, int64_t sequence_id = -1)
+{
     using namespace hazelcast::client::topic;
 
     return reliable_listener(false, sequence_id)
-        .on_received([&n_received_messages](message &&message){
-            ++n_received_messages;
+      .on_received([&n_received_messages](message&& message) {
+          ++n_received_messages;
 
-            auto object = message.get_message_object().get<std::string>();
-            if (object) {
-                std::cout << "[GenericListener::onMessage] Received message: " << *object << " for topic:" << message.get_name();
-            } else {
-                std::cout << "[GenericListener::onMessage] Received message with NULL object for topic:" <<
-                message.get_name();
-            }
-        });
+          auto object = message.get_message_object().get<std::string>();
+          if (object) {
+              std::cout << "[GenericListener::onMessage] Received message: " << *object
+                        << " for topic:" << message.get_name();
+          } else {
+              std::cout
+                << "[GenericListener::onMessage] Received message with NULL object for topic:"
+                << message.get_name();
+          }
+      });
 }
 
-void listen_with_default_config() {
+void
+listen_with_default_config()
+{
     hazelcast::client::hazelcast_client client;
 
     std::string topicName("MyReliableTopic");
     auto topic = client.get_reliable_topic(topicName);
 
-    std::atomic<int> numberOfMessagesReceived{0};
+    std::atomic<int> numberOfMessagesReceived{ 0 };
     auto listenerId = topic->add_message_listener(make_listener(numberOfMessagesReceived));
 
     std::cout << "Registered the listener with listener id:" << listenerId << std::endl;
@@ -48,13 +54,17 @@ void listen_with_default_config() {
     }
 
     if (topic->remove_message_listener(listenerId)) {
-        std::cout << "Successfully removed the listener " << listenerId << " for topic " << topicName << std::endl;
+        std::cout << "Successfully removed the listener " << listenerId << " for topic "
+                  << topicName << std::endl;
     } else {
-        std::cerr << "Failed to remove the listener " << listenerId << " for topic " << topicName << std::endl;
+        std::cerr << "Failed to remove the listener " << listenerId << " for topic " << topicName
+                  << std::endl;
     }
 }
 
-void listen_with_config() {
+void
+listen_with_config()
+{
     hazelcast::client::client_config clientConfig;
     std::string topicName("MyReliableTopic");
     hazelcast::client::config::reliable_topic_config reliableTopicConfig(topicName.c_str());
@@ -64,7 +74,7 @@ void listen_with_config() {
 
     auto topic = client.get_reliable_topic(topicName);
 
-    std::atomic<int> numberOfMessagesReceived{0};
+    std::atomic<int> numberOfMessagesReceived{ 0 };
     auto listenerId = topic->add_message_listener(make_listener(numberOfMessagesReceived));
 
     std::cout << "Registered the listener with listener id:" << listenerId << std::endl;
@@ -74,15 +84,19 @@ void listen_with_config() {
     }
 
     if (topic->remove_message_listener(listenerId)) {
-        std::cout << "Successfully removed the listener " << listenerId << " for topic " << topicName << std::endl;
+        std::cout << "Successfully removed the listener " << listenerId << " for topic "
+                  << topicName << std::endl;
     } else {
-        std::cerr << "Failed to remove the listener " << listenerId << " for topic " << topicName << std::endl;
+        std::cerr << "Failed to remove the listener " << listenerId << " for topic " << topicName
+                  << std::endl;
     }
 }
 
-int main() {
+int
+main()
+{
     listen_with_default_config();
-    
+
     listen_with_config();
 
     std::cout << "Finished" << std::endl;

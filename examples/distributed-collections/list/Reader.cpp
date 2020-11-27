@@ -15,12 +15,14 @@
  */
 #include <hazelcast/client/hazelcast_client.h>
 
-int main() {
+int
+main()
+{
     hazelcast::client::hazelcast_client hz;
 
     auto list = hz.get_list("list");
 
-    for (auto &item : list->to_array<std::string>().get()) {
+    for (auto& item : list->to_array<std::string>().get()) {
         std::cout << item << std::endl;
     }
 

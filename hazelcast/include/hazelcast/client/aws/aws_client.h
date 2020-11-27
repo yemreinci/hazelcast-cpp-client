@@ -20,36 +20,35 @@
 
 #include "hazelcast/util/hazelcast_dll.h"
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export	
+#pragma warning(disable : 4251) // for dll export
 #endif
 
 namespace hazelcast {
-    class logger;
+class logger;
 
-    namespace client {
-        namespace config {
-            class client_aws_config;
-        }
-        namespace aws {
-            class HAZELCAST_API aws_client {
-            public:
-                aws_client(config::client_aws_config &aws_config, logger &lg);
-
-                std::unordered_map<std::string, std::string> get_addresses();
-
-            private:
-                config::client_aws_config &aws_config_;
-                std::string endpoint_;
-                logger &logger_;
-            };
-        }
-    }
+namespace client {
+namespace config {
+class client_aws_config;
 }
+namespace aws {
+class HAZELCAST_API aws_client
+{
+public:
+    aws_client(config::client_aws_config& aws_config, logger& lg);
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+    std::unordered_map<std::string, std::string> get_addresses();
+
+private:
+    config::client_aws_config& aws_config_;
+    std::string endpoint_;
+    logger& logger_;
+};
+} // namespace aws
+} // namespace client
+} // namespace hazelcast
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif
-
-

@@ -15,9 +15,8 @@
  */
 #pragma once
 
-
-#include <string>
 #include <boost/asio.hpp>
+#include <string>
 
 #ifdef HZ_BUILD_WITH_SSL
 #include <boost/asio/ssl/context.hpp>
@@ -26,39 +25,39 @@
 
 #include "hazelcast/util/hazelcast_dll.h"
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(push)
-#pragma warning(disable: 4251) //for dll export
-#pragma warning(disable: 4003) //for  not enough actual parameters for macro 'min' in asio wait_traits
+#pragma warning(disable : 4251) // for dll export
+#pragma warning(                                                                                   \
+  disable : 4003) // for  not enough actual parameters for macro 'min' in asio wait_traits
 #endif
 
 namespace hazelcast {
-    namespace util {
-        class HAZELCAST_API SyncHttpsClient {
-        public:
-            SyncHttpsClient(const std::string &server_ip, const std::string &uri_path);
+namespace util {
+class HAZELCAST_API SyncHttpsClient
+{
+public:
+    SyncHttpsClient(const std::string& server_ip, const std::string& uri_path);
 
-            std::istream &open_connection();
-        private:
-            std::string server_;
-            std::string uri_path_;
+    std::istream& open_connection();
 
-            boost::asio::io_service io_service_;
+private:
+    std::string server_;
+    std::string uri_path_;
 
-            #ifdef HZ_BUILD_WITH_SSL
-            boost::asio::ssl::context ssl_context_;
-            std::unique_ptr<boost::asio::ssl::stream<boost::asio::ip::tcp::socket> > socket_;
-            #endif // HZ_BUILD_WITH_SSL
+    boost::asio::io_service io_service_;
 
-            boost::asio::streambuf response_;
-            std::istream response_stream_;
-        };
-    }
-}
+#ifdef HZ_BUILD_WITH_SSL
+    boost::asio::ssl::context ssl_context_;
+    std::unique_ptr<boost::asio::ssl::stream<boost::asio::ip::tcp::socket>> socket_;
+#endif // HZ_BUILD_WITH_SSL
 
-#if  defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+    boost::asio::streambuf response_;
+    std::istream response_stream_;
+};
+} // namespace util
+} // namespace hazelcast
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #pragma warning(pop)
 #endif
-
-
-
