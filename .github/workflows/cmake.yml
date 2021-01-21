@@ -15,6 +15,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install Boost
+      run: >
+        wget --quiet https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2 &&
+        tar xjf boost_1_75_0.tar.bz2 &&
+        rm boost_1_75_0.tar.bz2 &&
+        cd boost_1_75_0 &&
+        ./bootstrap.sh &&
+        ./b2 address-model=64 --with-thread --with-chrono &&
+        sudo ./b2 address-model=64 --with-thread --with-chrono install &&
+        cd .. &&
+        sudo rm -rf boost_1_75_0
+
     - uses: actions/checkout@v2
 
     - name: Create Build Environment
