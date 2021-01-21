@@ -16,8 +16,8 @@ jobs:
 
     steps:
     - name: Install dependencies
-      run: sudo apt-get install libthrift-dev libthrift
-      
+      run: sudo apt-get update && sudo apt-get install libthrift-dev
+
     - name: Install Boost
       run: >
         wget --quiet https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2 &&
