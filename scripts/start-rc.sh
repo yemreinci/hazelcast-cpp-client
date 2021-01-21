@@ -13,8 +13,6 @@ function cleanup {
 # Disables printing security sensitive data to the logs
 set +x
 
-trap cleanup EXIT
-
 HZ_VERSION="4.1"
 HAZELCAST_TEST_VERSION=${HZ_VERSION}
 HAZELCAST_ENTERPRISE_VERSION=${HZ_VERSION}
@@ -69,6 +67,17 @@ CLASSPATH="hazelcast-remote-controller-${HAZELCAST_RC_VERSION}.jar:hazelcast-ent
 echo "Starting Remote Controller ... enterprise ..."
 
 java -Dhazelcast.enterprise.license.key=${HAZELCAST_ENTERPRISE_KEY} -cp ${CLASSPATH} -Dhazelcast.phone.home.enabled=false com.hazelcast.remotecontroller.Main --use-simple-server &
-rcPid=$!
-wait ${rcPid}
-exit $?
+
+timeout=300
+while [ ${timeout} -gt 0 ]; do
+  netstat -an | grep "9701"
+  if [ $? -eq 0 ]; then
+    break
+  fi
+
+  echo "Sleeping 1 second. Remaining $timeout seconds."
+  sleep 1
+
+  timeout=$((timeout - 1))
+done
+

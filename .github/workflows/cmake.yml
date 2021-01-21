@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install dependencies
+      run: sudo apt-get install libthrift-dev libthrift
+      
     - name: Install Boost
       run: >
         wget --quiet https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2 &&
@@ -55,7 +58,12 @@ jobs:
       shell: bash
       run: sudo cmake --build . --target install --config $BUILD_TYPE
 
+    - name: Start RC
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: ./scripts/start-rc.sh
+
     - name: Run tests
       working-directory: ${{github.workspace}}
       shell: bash
-      run: ./build/hazelcast/test/src/client_test 
+      run: ./build/hazelcast/test/src/client_test
