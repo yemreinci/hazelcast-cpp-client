@@ -61,7 +61,7 @@ jobs:
     - name: Start RC
       working-directory: ${{github.workspace}}
       shell: bash
-      run: ./scripts/start-rc.sh
+      run: bash ./scripts/start-rc.sh
 
     - name: Run tests
       working-directory: ${{github.workspace}}
