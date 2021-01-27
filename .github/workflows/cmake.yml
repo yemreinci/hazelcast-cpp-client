@@ -61,7 +61,12 @@ jobs:
     - name: Start RC
       working-directory: ${{github.workspace}}
       shell: bash
-      run: bash ./scripts/start-rc.sh
+      env:
+        HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
+        EXAMPLE_KEY: ${{ secrets.EXAMPLE_KEY }}
+      run: >
+        echo "example key: $EXAMPLE_KEY" &&
+        bash ./scripts/start-rc.sh
 
     - name: Run tests
       working-directory: ${{github.workspace}}
