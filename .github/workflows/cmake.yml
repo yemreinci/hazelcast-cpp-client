@@ -12,13 +12,29 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        build_type: [Release, Debug]
+        build_type: [Debug]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-#    - name: Install dependencies
-#      run: sudo apt-get update && sudo apt-get install libthrift-dev net-tools
+    - name: Install dependencies on Ubuntu
+      if: ${{ runner.os == 'Linux' }}
+      run: >
+        sudo apt-get update &&
+        sudo apt-get install net-tools libthrift-dev libssl-dev
+
+    - name: Install dependencies on macOS
+      if: ${{ runner.os == 'macOS' }}
+      run: brew install bison  # required for thrift
+
+    - uses: actions/checkout@v2
+
+    - name: Download and bootstrap vcpkg
+      run: >
+        git clone https://github.com/microsoft/vcpkg && # TODO freeze commit
+        ./vcpkg/bootstrap-vcpkg.sh &&
+        ./vcpkg/vcpkg install boost openssl thrift
+
 #
 #    - name: Install Boost
 #      run: > # make this a script or sth
@@ -32,23 +48,16 @@ jobs:
 #        cd .. &&
 #        sudo rm -rf boost_1_75_0
 
-    - uses: actions/checkout@v2
-
-    - name: Create Build Environment
+    - name: Create build directory
       run: cmake -E make_directory ${{ github.workspace }}/build
 
-    - name: Demo
-      run: echo "Build type is ${{ matrix.build_type }}"
+    - name: Configure
+      working-directory: ${{ github.workspace }}/build
+      run: >
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
+                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                 -DBUILD_TESTS=ON
 
-    - name: CWD
-      run: pwd
-
-#    - name: Configure CMake
-#      # Use a bash shell so we can use the same syntax for environment variable
-#      # access regardless of the host operating system
-#      shell: bash
-#      working-directory: ${{github.workspace}}/build
-#      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_TESTS=ON
 #
 #    - name: Build
 #      working-directory: ${{github.workspace}}/build
