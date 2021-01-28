@@ -21,17 +21,18 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       run: >
         sudo apt-get update &&
-        sudo apt-get install net-tools libthrift-dev libssl-dev
+        sudo apt-get install net-tools
 
     - name: Install dependencies on macOS
       if: ${{ runner.os == 'macOS' }}
-      run: brew install bison  # required for thrift
+      run: >
+        brew install bison  # required for thrift
 
     - uses: actions/checkout@v2
 
     - name: Download and bootstrap vcpkg
-      run: >
-        git clone https://github.com/microsoft/vcpkg && # TODO freeze commit
+      run: > # TODO freeze vcpkg version
+        git clone https://github.com/microsoft/vcpkg &&
         ./vcpkg/bootstrap-vcpkg.sh &&
         ./vcpkg/vcpkg install boost openssl thrift
 
