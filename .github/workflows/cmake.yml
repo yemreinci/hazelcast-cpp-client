@@ -2,6 +2,10 @@ name: CMake
 
 on: [push]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     strategy:
@@ -34,7 +38,10 @@ jobs:
       run: cmake -E make_directory ${{ github.workspace }}/build
 
     - name: Demo
-      run: echo Build type is ${{ matrix.build_type }}
+      run: echo "Build type is ${{ matrix.build_type }}"
+
+    - name: CWD
+      run: pwd
 
 #    - name: Configure CMake
 #      # Use a bash shell so we can use the same syntax for environment variable
