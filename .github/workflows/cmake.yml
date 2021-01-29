@@ -46,7 +46,8 @@ jobs:
         git clone https://github.com/microsoft/vcpkg &&
         ./vcpkg/bootstrap-vcpkg.sh &&
         ./vcpkg/vcpkg install boost openssl thrift &&
-        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads
+        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads &&
+        pwd
 
     - name: Create build directory
       run: cmake -E make_directory ${{ github.workspace }}/build
