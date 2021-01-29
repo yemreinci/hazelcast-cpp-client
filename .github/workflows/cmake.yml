@@ -40,14 +40,14 @@ jobs:
 
     # TODO freeze vcpkg version
     # TODO only install necessary boost components as all of them takes quite a lot of cache space
-#    - name: Download vcpkg and install dependencies
-#      if: ${{ steps.cache-vcpkg.outputs.cache-hit != 'true' }}
-#      run: >
-#        git clone https://github.com/microsoft/vcpkg &&
-#        ./vcpkg/bootstrap-vcpkg.sh &&
-#        ./vcpkg/vcpkg install boost openssl thrift &&
-#        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads &&
-#        pwd
+    - name: Download vcpkg and install dependencies
+      if: ${{ steps.cache-vcpkg.outputs.cache-hit != 'true' }}
+      run: >
+        git clone https://github.com/microsoft/vcpkg &&
+        ./vcpkg/bootstrap-vcpkg.sh &&
+        ./vcpkg/vcpkg install boost openssl thrift &&
+        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads &&
+        pwd
 
     - name: Create build directory
       run: cmake -E make_directory "${{ github.workspace }}/build"
