@@ -48,42 +48,22 @@ jobs:
         ./vcpkg/vcpkg install boost openssl thrift &&
         rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads
 
-#
-#    - name: Install Boost
-#      run: > # make this a script or sth
-#        wget --quiet https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2 &&
-#        tar xjf boost_1_75_0.tar.bz2 &&
-#        rm boost_1_75_0.tar.bz2 &&
-#        cd boost_1_75_0 &&
-#        ./bootstrap.sh &&
-#        ./b2 address-model=64 --with-thread --with-chrono &&
-#        sudo ./b2 address-model=64 --with-thread --with-chrono install &&
-#        cd .. &&
-#        sudo rm -rf boost_1_75_0
-
     - name: Create build directory
       run: cmake -E make_directory ${{ github.workspace }}/build
 
     - name: Configure
       working-directory: ${{ github.workspace }}/build
-      run: |
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
-                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}                      \
-                 -DBUILD_TESTS=ON                                                 \
-                 -DWITH_OPENSSL=ON
+      run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_TESTS=ON  -DWITH_OPENSSL=ON
 
-#
-#    - name: Build
-#      working-directory: ${{github.workspace}}/build
-#      shell: bash
-#      # Execute the build.  You can specify a specific target with "--target <NAME>"
-#      run: cmake --build . --config $BUILD_TYPE --parallel
-#
-#    - name: Install
-#      working-directory: ${{github.workspace}}/build
-#      shell: bash
-#      run: sudo cmake --build . --target install --config $BUILD_TYPE
-#
+    - name: Build
+      working-directory: ${{ github.workspace }}/build
+      # TODO maybe use --parallel
+      run: cmake --build . --config ${{ matrix.build_type }}
+
+    - name: Install
+      working-directory: ${{ github.workspace }}/build
+      run: sudo cmake --build . --target install --config ${{ matrix.build_type }}
+
 #    - name: Start RC
 #      working-directory: ${{github.workspace}}
 #      shell: bash
