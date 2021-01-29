@@ -40,25 +40,29 @@ jobs:
 
     # TODO freeze vcpkg version
     # TODO only install necessary boost components as all of them takes quite a lot of cache space
-    - name: Download vcpkg and install dependencies
-      if: ${{ steps.cache-vcpkg.outputs.cache-hit != 'true' }}
-      run: >
-        git clone https://github.com/microsoft/vcpkg &&
-        ./vcpkg/bootstrap-vcpkg.sh &&
-        ./vcpkg/vcpkg install boost openssl thrift &&
-        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads &&
-        pwd
+#    - name: Download vcpkg and install dependencies
+#      if: ${{ steps.cache-vcpkg.outputs.cache-hit != 'true' }}
+#      run: >
+#        git clone https://github.com/microsoft/vcpkg &&
+#        ./vcpkg/bootstrap-vcpkg.sh &&
+#        ./vcpkg/vcpkg install boost openssl thrift &&
+#        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads &&
+#        pwd
 
     - name: Create build directory
-      run: cmake -E make_directory ${{ github.workspace }}/build
+      run: cmake -E make_directory "${{ github.workspace }}/build"
 
     - name: Configure
       working-directory: ${{ github.workspace }}/build
-      run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_TESTS=ON  -DWITH_OPENSSL=ON
+      run: >
+        cmake ..
+        -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DBUILD_TESTS=ON
+        -DWITH_OPENSSL=ON
 
     - name: Build
       working-directory: ${{ github.workspace }}/build
-      # TODO maybe use --parallel
       run: cmake --build . --config ${{ matrix.build_type }}
 
     - name: Install
