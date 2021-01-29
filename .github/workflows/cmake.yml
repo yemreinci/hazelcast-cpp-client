@@ -27,7 +27,7 @@ jobs:
     - name: Install system dependencies for macOS
       if: ${{ runner.os == 'macOS' }}
       run: >
-        brew install bison  # required for thrift
+        brew install bison
 
     - uses: actions/checkout@v2
 
@@ -46,8 +46,7 @@ jobs:
         git clone https://github.com/microsoft/vcpkg &&
         ./vcpkg/bootstrap-vcpkg.sh &&
         ./vcpkg/vcpkg install boost openssl thrift &&
-        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads &&
-        pwd
+        rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads
 
     - name: Create build directory
       run: cmake -E make_directory "${{ github.workspace }}/build"
@@ -56,6 +55,7 @@ jobs:
       working-directory: ${{ github.workspace }}/build
       run: >
         cmake ..
+        -A Win32
         -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DBUILD_TESTS=ON
