@@ -74,6 +74,7 @@ jobs:
         run: |
           git clone https://github.com/microsoft/vcpkg
           ./vcpkg/bootstrap-vcpkg.sh
+          ./vcpkg/vcpkg install boost openssl thrift
           rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads
 
       - name: Build, Install, Test & Verify  # TODO separate this into steps
