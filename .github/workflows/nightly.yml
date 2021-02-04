@@ -1,4 +1,4 @@
-name: CMake
+name: Nightly
 
 on: [push]
 
@@ -9,7 +9,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        build_type: [Release]
+        arch: [64]
+        build_type: [Debug, Release]
+        library_type: [SHARED, STATIC]
+        with_openssl: [ON, OFF]
 
     runs-on: ${{ matrix.os }}
 
@@ -45,10 +48,10 @@ jobs:
 
     - name: Build, Install, Test & Verify  # TODO separate this into steps
       env:
-        BIT_VERSION: 64
+        BIT_VERSION: ${{ matrix.arch }}
         BUILD_TYPE: ${{ matrix.build_type }}
-        LIBRARY_TYPE: SHARED
-        WITH_OPENSSL: OFF
+        LIBRARY_TYPE: ${{ matrix.library_type }}
+        WITH_OPENSSL: ${{ matrix.with_openssl }}
         COVERAGE: OFF
         TOOLCHAIN: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
         HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
@@ -84,6 +87,5 @@ jobs:
           BUILD_TYPE: Release
           LIBRARY_TYPE: SHARED
           WITH_OPENSSL: OFF
-          TOOLCHAIN: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
           HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
         run: .\scripts\do-all-windows.bat
