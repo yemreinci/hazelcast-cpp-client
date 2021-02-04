@@ -70,10 +70,10 @@ jobs:
       # TODO freeze vcpkg version
       - name: Download vcpkg and install dependencies
         if: ${{ steps.cache-vcpkg.outputs.cache-hit != 'true' }}
+        shell: bash
         run: |
           git clone https://github.com/microsoft/vcpkg
           ./vcpkg/bootstrap-vcpkg.sh
-          ./vcpkg/vcpkg install boost openssl thrift
           rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads
 
       - name: Build, Install, Test & Verify  # TODO separate this into steps
@@ -85,4 +85,4 @@ jobs:
           WITH_OPENSSL: OFF
           TOOLCHAIN: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
           HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
-        run: ./scripts/do-all-windows.bat
+        run: .\scripts\do-all-windows.bat
