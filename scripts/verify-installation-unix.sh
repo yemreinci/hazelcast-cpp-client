@@ -29,7 +29,7 @@ fi
 export CXXFLAGS
 
 echo "Configuring..."
-cmake -S ./examples -B "$BUILD_DIR" "$@" -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake -S ./examples -B "$BUILD_DIR" "$@"
 
 echo "Building..."
 cmake --build "$BUILD_DIR" --verbose --parallel 8

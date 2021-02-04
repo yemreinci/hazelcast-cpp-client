@@ -2,12 +2,9 @@ name: CMake
 
 on: [push]
 
-defaults:
-  run:
-    shell: bash
 
 jobs:
-  build:
+  build-unix:
     strategy:
       fail-fast: false
       matrix:
@@ -19,14 +16,13 @@ jobs:
     steps:
     - name: Install system dependencies for Ubuntu
       if: ${{ runner.os == 'Linux' }}
-      # TODO remove net-tools if RC is in docker
-      run: >
-        sudo apt-get update &&
+      run: |
+        sudo apt-get update
         sudo apt-get install net-tools
 
     - name: Install system dependencies for macOS
       if: ${{ runner.os == 'macOS' }}
-      run: >
+      run: |
         brew install bison
 
     - uses: actions/checkout@v2
@@ -36,61 +32,57 @@ jobs:
       uses: actions/cache@v2
       with:
         path: vcpkg
-        key: ${{ runner.os }}-vcpkg # TODO will probably need arch as well.
+        key: ${{ runner.os }}-vcpkg  # TODO this will probably need arch as well.
 
     # TODO freeze vcpkg version
-    # TODO only install necessary boost components as all of them takes quite a lot of cache space
     - name: Download vcpkg and install dependencies
       if: ${{ steps.cache-vcpkg.outputs.cache-hit != 'true' }}
-      run: >
-        git clone https://github.com/microsoft/vcpkg &&
-        ./vcpkg/bootstrap-vcpkg.sh &&
-        ./vcpkg/vcpkg install boost openssl thrift &&
+      run: |
+        git clone https://github.com/microsoft/vcpkg
+        ./vcpkg/bootstrap-vcpkg.sh
+        ./vcpkg/vcpkg install boost openssl thrift
         rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads
 
-    - name: Do All
+    - name: Build, Install, Test & Verify  # TODO separate this into steps
       env:
         BIT_VERSION: 64
         BUILD_TYPE: ${{ matrix.build_type }}
         LIBRARY_TYPE: SHARED
         WITH_OPENSSL: OFF
         COVERAGE: OFF
+        TOOLCHAIN: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
         HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
       run: ./scripts/do-all-unix.sh
 
-#    - name: Create build directory
-#      run: cmake -E make_directory "${{ github.workspace }}/build"
-#
-#    - name: Configure
-#      working-directory: ${{ github.workspace }}/build
-#      run: >
-#        cmake ..
-#        -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
-#        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-#        -DBUILD_TESTS=ON
-#        -DWITH_OPENSSL=ON
-#
-#    - name: Build
-#      working-directory: ${{ github.workspace }}/build
-#      run: cmake --build . --config ${{ matrix.build_type }}
-#
-#    - name: Install
-#      working-directory: ${{ github.workspace }}/build
-#      run: sudo cmake --build . --target install --config ${{ matrix.build_type }}
-#
-#    - name: Start remote-controller
-#      working-directory: ${{ github.workspace }}
-#      env:
-#        HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
-#      run: bash ./scripts/start-rc.sh
-#
-#    - name: Run tests
-#      working-directory: ${{ github.workspace }}
-#      run: ./build/hazelcast/test/src/client_test
-#
-#    - name: Build examples
-#      working-directory: ${{ github.workspace }}
-#      run: |
-#        cmake -E make_directory "build-examples"
-#        cd build-examples
-#        cmake .. -DLIBRARY_FOR_EXAMPLES=hazelcastcxx_ssl
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache vcpkg
+        id: cache-vcpkg
+        uses: actions/cache@v2
+        with:
+          path: vcpkg
+          key: ${{ runner.os }}-vcpkg  # TODO this will probably need arch as well.
+
+      # TODO freeze vcpkg version
+      - name: Download vcpkg and install dependencies
+        if: ${{ steps.cache-vcpkg.outputs.cache-hit != 'true' }}
+        run: |
+          git clone https://github.com/microsoft/vcpkg
+          ./vcpkg/bootstrap-vcpkg.sh
+          ./vcpkg/vcpkg install boost openssl thrift
+          rm -rf ./vcpkg/buildtrees/ ./vcpkg/downloads
+
+      - name: Build, Install, Test & Verify  # TODO separate this into steps
+        env:
+          VCPKG_ROOT: ${{ github.workspace }}\vcpkg
+          BIT_VERSION: 32
+          BUILD_TYPE: Release
+          LIBRARY_TYPE: SHARED
+          WITH_OPENSSL: OFF
+          TOOLCHAIN: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+          HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
+        run: ./scripts/do-all-windows.bat

@@ -54,7 +54,7 @@ mkdir $BUILD_DIR
 cd $BUILD_DIR
 
 echo "Configuring..."
-cmake .. "$@" -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake .. "$@"
 
 echo "Building..."
 cmake --build . --verbose

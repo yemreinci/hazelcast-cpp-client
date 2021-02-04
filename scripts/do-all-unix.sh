@@ -9,6 +9,7 @@
 # - LIBRARY_TYPE : SHARED or STATIC
 # - WITH_OPENSSL : ON or OFF
 # - COVERAGE: ON or OFF
+# - TOOLCHAIN: optional, path to a CMake toolchain file
 #
 
 # exit if a command returns non-zero status
@@ -36,6 +37,7 @@ fi
 ./scripts/build-unix.sh                      \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE           \
     -DCMAKE_INSTALL_PREFIX=$DESTINATION      \
+    -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN        \
     -DBUILD_STATIC_LIB=$BUILD_STATIC_LIB     \
     -DBUILD_SHARED_LIB=$BUILD_SHARED_LIB     \
     -DWITH_OPENSSL=$WITH_OPENSSL             \
@@ -65,4 +67,5 @@ fi
 
 ./scripts/verify-installation-unix.sh            \
   -DCMAKE_PREFIX_PATH=$DESTINATION               \
+  -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN              \
   -DLIBRARY_FOR_EXAMPLES=$LIBRARY_FOR_EXAMPLES
