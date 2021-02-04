@@ -55,6 +55,7 @@ jobs:
         LIBRARY_TYPE: SHARED
         WITH_OPENSSL: ON
         COVERAGE: OFF
+        HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
       run: ./scripts/do-all-unix.sh
 
 #    - name: Create build directory
