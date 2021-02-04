@@ -53,7 +53,7 @@ jobs:
         BIT_VERSION: 64
         BUILD_TYPE: ${{ matrix.build_type }}
         LIBRARY_TYPE: SHARED
-        WITH_OPENSSL: ON
+        WITH_OPENSSL: OFF
         COVERAGE: OFF
         HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
       run: ./scripts/do-all-unix.sh
