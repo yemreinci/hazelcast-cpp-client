@@ -54,6 +54,8 @@ echo %TEST_EXECUTABLE%
 %TEST_EXECUTABLE% --gtest_output="xml:CPP_Client_Test_Report.xml"
 set result=%errorlevel%
 
+echo "tests are complete: %result%"
+
 taskkill /T /F /FI "WINDOWTITLE eq hazelcast-remote-controller"
 
 exit /b %result%
