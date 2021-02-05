@@ -12,7 +12,7 @@ jobs:
         arch: [ 64 ]
         build_type: [ Debug, Release ]
         library_type: [ SHARED, STATIC ]
-        with_openssl: [ ON, OFF ]
+        with_openssl: [ OFF ]  # TODO add ON after adding aws key
 
     runs-on: ${{ matrix.os }}
 
@@ -63,7 +63,7 @@ jobs:
         arch: [ 32, 64 ]
         build_type: [ Debug, Release ]
         library_type: [ SHARED, STATIC ]
-        with_openssl: [ ON, OFF ]
+        with_openssl: [ OFF ]  # TODO add ON after adding aws key
 
     runs-on: windows-latest
 
