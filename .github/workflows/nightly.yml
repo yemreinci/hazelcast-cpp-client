@@ -61,7 +61,7 @@ jobs:
       fail-fast: false
       matrix:
         arch: [ 32 ]
-        build_type: [ Debug ]
+        build_type: [ Debug, Release ]
         library_type: [ STATIC ]
         with_openssl: [ OFF ]  # TODO add ON after adding aws key
 
