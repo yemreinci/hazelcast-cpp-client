@@ -62,7 +62,7 @@ jobs:
       matrix:
         arch: [ 32 ]
         build_type: [ Debug, Release ]
-        library_type: [ STATIC ]
+        library_type: [ SHARED ]
         with_openssl: [ OFF ]  # TODO add ON after adding aws key
 
     runs-on: windows-latest
