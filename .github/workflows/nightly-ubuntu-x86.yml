@@ -12,13 +12,20 @@ jobs:
         with_openssl: [ OFF, ON ]
 
     runs-on: ubuntu-latest
+    container: i386/ubuntu
 
     steps:
+      - name: Make sure the target architecture is 32 bit
+        run: |
+          echo 'int main() { return sizeof(void*) != 4; }' > test.c
+          gcc test.c -oa
+          ./a
+          rm a test.c
+
       - name: Install Necessary Packages
         run: |
-          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y net-tools gcc-multilib g++-multilib libssl-dev:i386
+          sudo apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4
 
       - name: Install Boost
         run: |
@@ -27,7 +34,7 @@ jobs:
           rm boost_1_75_0.tar.bz2
           cd boost_1_75_0
           ./bootstrap.sh
-          sudo ./b2 address-model=32 --with-thread --with-chrono install
+          sudo ./b2 --with-thread --with-chrono install
           cd ..
           sudo rm -rf boost_1_75_0
 
@@ -37,10 +44,9 @@ jobs:
           tar xzf thrift-0.13.0.tar.gz
           rm thrift-0.13.0.tar.gz
           cd thrift-0.13.0
-          CLAGS=-m32 CXXFLAGS=-m32 \
-          ./configure --disable-debug --disable-tests --disable-tutorial \
+          ./configure --disable-debug --disable-tests --disable-tutorial --disable-static \
                       --without-as3 --without-erlang --without-haskell --without-java --without-perl \
-                      --without-php --without-php_extension --without-python --without-ruby \
+                      --without-php --without-php_extension --without-rs --without-python --without-ruby \
                       --without-swift --without-csharp --without-dart --without-qt5 --without-c_glib \
                       --without-nodejs --without-nodets --without-lua --without-py3 --without-ruby \
                       --without-go --without-cl --without-haxe --without-dotnetcore --without-d \
@@ -54,7 +60,6 @@ jobs:
 
       - name: Build, Install, Test & Verify
         env:
-          BIT_VERSION: '32'
           BUILD_TYPE: ${{ matrix.build_type }}
           LIBRARY_TYPE: ${{ matrix.library_type }}
           WITH_OPENSSL: ${{ matrix.with_openssl }}

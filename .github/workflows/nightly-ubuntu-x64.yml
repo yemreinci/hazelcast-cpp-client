@@ -36,9 +36,9 @@ jobs:
           tar xzf thrift-0.13.0.tar.gz
           rm thrift-0.13.0.tar.gz
           cd thrift-0.13.0
-          ./configure --disable-debug --disable-tests --disable-tutorial \
+          ./configure --disable-debug --disable-tests --disable-tutorial --disable-static \
                       --without-as3 --without-erlang --without-haskell --without-java --without-perl \
-                      --without-php --without-php_extension --without-python --without-ruby \
+                      --without-php --without-php_extension --without-rs --without-python --without-ruby \
                       --without-swift --without-csharp --without-dart --without-qt5 --without-c_glib \
                       --without-nodejs --without-nodets --without-lua --without-py3 --without-ruby \
                       --without-go --without-cl --without-haxe --without-dotnetcore --without-d \
