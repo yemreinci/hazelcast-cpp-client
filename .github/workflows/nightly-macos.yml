@@ -1,9 +1,12 @@
 name: Nightly-macOS
 
-on: [ workflow_dispatch ]
+on:
+  workflow_dispatch:
+  schedule:
+    cron: '0 0 * * *'
 
 jobs:
-  build:
+  Nightly-macOS:
     strategy:
       fail-fast: false
       matrix:
