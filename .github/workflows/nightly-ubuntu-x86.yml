@@ -50,7 +50,7 @@ jobs:
                       --without-swift --without-csharp --without-dart --without-qt5 --without-c_glib \
                       --without-nodejs --without-nodets --without-lua --without-py3 --without-ruby \
                       --without-go --without-cl --without-haxe --without-dotnetcore --without-d \
-                      --without-zlib --without-libevent --without-openssl
+                      --without-zlib --without-libevent
           make -j
           make install
           cd ..
