@@ -36,10 +36,13 @@ jobs:
           tar xzf thrift-0.13.0.tar.gz
           rm thrift-0.13.0.tar.gz
           cd thrift-0.13.0
-          ./configure --disable-debug --disable-tests \
+          ./configure --disable-debug --disable-tests --disable-tutorial \
                       --without-erlang --without-haskell --without-java --without-perl \
                       --without-php --without-php_extension --without-python --without-ruby \
-                      --without-swift
+                      --without-swift --without-csharp --without-dart --without-qt5 --without-c_glib \
+                      --without-nodejs --without-nodets --without-lua --without-py3 --without-ruby \
+                      --without-go --without-cl --without-haxe --without-dotnetcore --without-d \
+
           make -j
           sudo make install
           cd ..
