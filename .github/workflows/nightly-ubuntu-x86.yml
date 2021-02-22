@@ -15,17 +15,17 @@ jobs:
     container: i386/ubuntu
 
     steps:
+      - name: Install Necessary Packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4
+
       - name: Make sure the target architecture is 32 bit
         run: |
           echo 'int main() { return sizeof(void*) != 4; }' > test.c
           gcc test.c -oa
           ./a
           rm a test.c
-
-      - name: Install Necessary Packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4
 
       - name: Install Boost
         run: |
