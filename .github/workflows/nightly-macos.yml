@@ -1,4 +1,4 @@
-name: Nightly-Linux
+name: Nightly-macOS
 
 on: [ push ]
 
@@ -7,15 +7,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [ 32, 64 ]
+        arch: [ 64 ]
         build_type: [ Debug, Release ]
         library_type: [ SHARED, STATIC ]
         with_openssl: [ OFF ]  # TODO add ON after adding aws key
 
-    runs-on: ubuntu-latest
-    container: ./docker/hazelcast-fedora-x86_64
+    runs-on: macos-latest
 
     steps:
+      - name: Install Dependencies
+        run: |
+          brew install boost openssl thrift
+
       - uses: actions/checkout@v2
 
       - name: Build, Install, Test & Verify
