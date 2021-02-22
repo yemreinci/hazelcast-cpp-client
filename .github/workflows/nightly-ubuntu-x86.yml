@@ -17,8 +17,8 @@ jobs:
     steps:
       - name: Install Necessary Packages
         run: |
-          sudo apt-get update
-          sudo apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4
+          apt-get update
+          apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4
 
       - name: Make sure the target architecture is 32 bit
         run: |
@@ -34,9 +34,9 @@ jobs:
           rm boost_1_75_0.tar.bz2
           cd boost_1_75_0
           ./bootstrap.sh
-          sudo ./b2 --with-thread --with-chrono install
+          ./b2 --with-thread --with-chrono install
           cd ..
-          sudo rm -rf boost_1_75_0
+          rm -rf boost_1_75_0
 
       - name: Install Thrift
         run: |
@@ -52,7 +52,7 @@ jobs:
                       --without-go --without-cl --without-haxe --without-dotnetcore --without-d \
                       --without-zlib --without-libevent
           make -j
-          sudo make install
+          make install
           cd ..
           rm -rf thrift-0.13.0
 
