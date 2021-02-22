@@ -1,16 +1,15 @@
 name: Nightly-macOS
 
-on: [ push ]
+on: [ workflow_dispatch ]
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        arch: [ 64 ]
         build_type: [ Debug, Release ]
         library_type: [ SHARED, STATIC ]
-        with_openssl: [ OFF, ON ]  # TODO add ON after adding aws key
+        with_openssl: [ OFF, ON ]
 
     runs-on: macos-latest
 
@@ -23,7 +22,6 @@ jobs:
 
       - name: Build, Install, Test & Verify
         env:
-          BIT_VERSION: ${{ matrix.arch }}
           BUILD_TYPE: ${{ matrix.build_type }}
           LIBRARY_TYPE: ${{ matrix.library_type }}
           WITH_OPENSSL: ${{ matrix.with_openssl }}
