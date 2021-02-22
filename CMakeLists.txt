@@ -19,7 +19,6 @@ cmake_minimum_required(VERSION 3.10)
 project(hazelcast-cpp-client
         VERSION 4.0.0
         DESCRIPTION "Hazelcast C++ Client"
-        HOMEPAGE_URL https://hazelcast.org/clients/cplusplus/
         LANGUAGES CXX)
 
 # Set the C++ standard
