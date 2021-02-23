@@ -7,8 +7,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_type: [ Debug ]
-        library_type: [ SHARED ]
+        build_type: [ Debug, Release ]
+        library_type: [ SHARED, STATIC ]
         with_openssl: [ OFF ]
 
     runs-on: ubuntu-latest
