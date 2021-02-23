@@ -270,7 +270,7 @@ install(
         hazelcast/generated-sources/src/
         ${CMAKE_CURRENT_BINARY_DIR}/include/
 
-    TYPE INCLUDE
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.h"
 )
 
