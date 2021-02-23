@@ -10,7 +10,7 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-wget --quiet https://archive.apache.org/dist/thrift/$1/thrift-$1.tar.gz
+curl --silent -Lo thrift-$1.tar.gz https://archive.apache.org/dist/thrift/$1/thrift-$1.tar.gz
 tar xzf thrift-$1.tar.gz
 rm thrift-$1.tar.gz
 cd thrift-$1

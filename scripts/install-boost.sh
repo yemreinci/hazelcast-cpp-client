@@ -12,7 +12,7 @@ fi
 
 TARBALL_NAME=boost_$(echo "$1" | tr . _)
 
-curl -Lo $TARBALL_NAME.tar.gz https://dl.bintray.com/boostorg/release/$1/source/$TARBALL_NAME.tar.gz
+curl --silent -Lo $TARBALL_NAME.tar.gz https://dl.bintray.com/boostorg/release/$1/source/$TARBALL_NAME.tar.gz
 tar xzf $TARBALL_NAME.tar.gz
 rm $TARBALL_NAME.tar.gz
 cd $TARBALL_NAME
