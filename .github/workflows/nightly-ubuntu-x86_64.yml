@@ -19,36 +19,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y net-tools libssl-dev
 
+      - uses: actions/checkout@v2
+
       - name: Install Boost
         run: |
-          wget --quiet https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2;
-          tar xjf boost_1_75_0.tar.bz2
-          rm boost_1_75_0.tar.bz2
-          cd boost_1_75_0
-          ./bootstrap.sh
-          sudo ./b2 address-model=64 --with-thread --with-chrono install
-          cd ..
-          sudo rm -rf boost_1_75_0
+          sudo ./scripts/install-boost.sh 1.75.0
 
       - name: Install Thrift
         run: |
-          wget --quiet https://archive.apache.org/dist/thrift/0.13.0/thrift-0.13.0.tar.gz
-          tar xzf thrift-0.13.0.tar.gz
-          rm thrift-0.13.0.tar.gz
-          cd thrift-0.13.0
-          ./configure --disable-debug --disable-tests --disable-tutorial --disable-static \
-                      --without-as3 --without-erlang --without-haskell --without-java --without-perl \
-                      --without-php --without-php_extension --without-rs --without-python --without-ruby \
-                      --without-swift --without-csharp --without-dart --without-qt5 --without-c_glib \
-                      --without-nodejs --without-nodets --without-lua --without-py3 --without-ruby \
-                      --without-go --without-cl --without-haxe --without-dotnetcore --without-d \
-                      --without-zlib --without-libevent
-          make -j
-          sudo make install
-          cd ..
-          rm -rf thrift-0.13.0
-
-      - uses: actions/checkout@v2
+          sudo ./scripts/install-thrift.sh 0.13.0
 
       - name: Build, Install, Test & Verify
         env:
@@ -57,4 +36,5 @@ jobs:
           WITH_OPENSSL: ${{ matrix.with_openssl }}
           COVERAGE: OFF
           HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
-        run: ./scripts/do-all-unix.sh
+        run: |
+          ./scripts/do-all-unix.sh

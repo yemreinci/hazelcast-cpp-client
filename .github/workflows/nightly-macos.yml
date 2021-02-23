@@ -1,4 +1,4 @@
-name: Nightly-macOS
+name: nightly-macOS
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  Nightly-macOS:
+  nightly-macOS:
     strategy:
       fail-fast: false
       matrix:
@@ -30,4 +30,5 @@ jobs:
           WITH_OPENSSL: ${{ matrix.with_openssl }}
           COVERAGE: OFF
           HAZELCAST_ENTERPRISE_KEY: ${{ secrets.HAZELCAST_ENTERPRISE_KEY }}
-        run: ./scripts/do-all-unix.sh
+        run: |
+          ./scripts/do-all-unix.sh
