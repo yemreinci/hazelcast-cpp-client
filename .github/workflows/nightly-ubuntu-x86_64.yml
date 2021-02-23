@@ -1,6 +1,6 @@
 name: nightly-Ubuntu-x86_64
 
-on: [ push ]
+on: [ workflow_dispatch ]
 
 jobs:
   nightly-Ubuntu-x86_64:

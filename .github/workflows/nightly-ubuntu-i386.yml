@@ -1,6 +1,6 @@
 name: nightly-Ubuntu-i386
 
-on: [ push ]
+on: [ workflow_dispatch ]
 
 jobs:
   nightly-Ubuntu-i386:
