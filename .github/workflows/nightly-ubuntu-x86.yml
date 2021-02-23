@@ -18,7 +18,7 @@ jobs:
       - name: Install Necessary Packages
         run: |
           apt-get update
-          apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4
+          apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4 git
 
       - name: Make sure the target architecture is 32 bit
         run: |
