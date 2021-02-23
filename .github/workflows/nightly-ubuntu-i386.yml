@@ -1,9 +1,9 @@
-name: Nightly-Ubuntu-x64
+name: nightly-Ubuntu-i386
 
 on: [ push ]
 
 jobs:
-  Nightly-Ubuntu-x64:
+  nightly-Ubuntu-i386:
     strategy:
       fail-fast: false
       matrix:
@@ -12,12 +12,32 @@ jobs:
         with_openssl: [ OFF, ON ]
 
     runs-on: ubuntu-latest
+    container: i386/ubuntu
 
     steps:
       - name: Install Necessary Packages
         run: |
-          sudo apt-get update
-          sudo apt-get install -y net-tools libssl-dev
+          apt-get update
+          apt-get install -y net-tools build-essential libssl-dev wget automake m4 git
+
+      - name: Make sure the target architecture is 32 bit
+        run: |
+          echo 'int main() { return sizeof(void*) != 4; }' > test.c
+          gcc test.c -oa
+          ./a
+          rm a test.c
+
+      - name: Install CMake
+        run: |
+          wget https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5.tar.gz
+          tar xzf cmake-3.19.5.tar.gz
+          rm cmake-3.19.5.tar.gz
+          cd cmake-3.19.5
+          ./bootstrap
+          make -j
+          make install
+          cd ..
+          rm -rf cmake-3.19.5
 
       - name: Install Boost
         run: |
@@ -26,9 +46,9 @@ jobs:
           rm boost_1_75_0.tar.bz2
           cd boost_1_75_0
           ./bootstrap.sh
-          sudo ./b2 address-model=64 --with-thread --with-chrono install
+          ./b2 --with-thread --with-chrono install
           cd ..
-          sudo rm -rf boost_1_75_0
+          rm -rf boost_1_75_0
 
       - name: Install Thrift
         run: |
@@ -44,11 +64,11 @@ jobs:
                       --without-go --without-cl --without-haxe --without-dotnetcore --without-d \
                       --without-zlib --without-libevent
           make -j
-          sudo make install
+          make install
           cd ..
           rm -rf thrift-0.13.0
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
       - name: Build, Install, Test & Verify
         env:
