@@ -18,7 +18,7 @@ jobs:
       - name: Install Necessary Packages
         run: |
           apt-get update
-          apt-get install -y net-tools build-essential cmake libssl-dev wget automake m4 git
+          apt-get install -y net-tools build-essential libssl-dev wget automake m4 git
 
       - name: Make sure the target architecture is 32 bit
         run: |
@@ -55,6 +55,13 @@ jobs:
           make install
           cd ..
           rm -rf thrift-0.13.0
+
+      - name: Install CMake
+        run: |
+          wget --quiet https://github.com/Kitware/CMake/releases/download/v3.19.0/cmake-3.19.0-Linux-x86_64.sh && \
+          chmod +x ./cmake-3.19.0-Linux-x86_64.sh && \
+          ./cmake-3.19.0-Linux-x86_64.sh --prefix=/usr/local/ --exclude-subdir && \
+          rm cmake-3.19.0-Linux-x86_64.sh
 
       - uses: actions/checkout@v1
 
