@@ -18,7 +18,7 @@ jobs:
       - name: Install Necessary Packages
         run: |
           apt-get update
-          apt-get install -y net-tools build-essential libssl-dev wget automake m4 git maven openjdk-11-jre-headless
+          apt-get install -y net-tools build-essential libssl-dev curl automake m4 git maven openjdk-11-jre-headless
 
       - name: Make sure the target architecture is 32 bit
         run: |
@@ -29,7 +29,8 @@ jobs:
 
       - name: Install CMake
         run: |
-          wget https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5.tar.gz
+          curl -Lo cmake-3.19.5.tar.gz \
+                   https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5.tar.gz
           tar xzf cmake-3.19.5.tar.gz
           rm cmake-3.19.5.tar.gz
           cd cmake-3.19.5
