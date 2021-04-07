@@ -1031,9 +1031,10 @@ namespace hazelcast {
                     call_id_sequence_->next();
                     invoke_on_selection();
                     if (!lifecycle_service_.is_running()) {
-                        return invocation_promise_.get_future().then([](boost::future<protocol::ClientMessage> f) {
-                            return f.get();
-                        });
+                        return invocation_promise_.get_future().then(execution_service_->get_user_executor(),
+                                                                     [](boost::future<protocol::ClientMessage> f) {
+                                                                         return f.get();
+                                                                     });
                     }
                     auto id_seq = call_id_sequence_;
                     return invocation_promise_.get_future().then(execution_service_->get_user_executor(),
@@ -1050,9 +1051,10 @@ namespace hazelcast {
                     call_id_sequence_->force_next();
                     invoke_on_selection();
                     if (!lifecycle_service_.is_running()) {
-                        return invocation_promise_.get_future().then([](boost::future<protocol::ClientMessage> f) {
-                            return f.get();
-                        });
+                        return invocation_promise_.get_future().then(execution_service_->get_user_executor(),
+                                                                     [](boost::future<protocol::ClientMessage> f) {
+                                                                         return f.get();
+                                                                     });
                     }
                     auto id_seq = call_id_sequence_;
                     return invocation_promise_.get_future().then(execution_service_->get_user_executor(),
