@@ -1,0 +1,16 @@
+name: vcpkg-test
+
+on: [push]
+
+jobs:
+  vcpkg-test:
+    
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Deps
+        run: |
+          C:\vcpkg\vcpkg.exe install boost-any boost-asio boost-chrono boost-format `
+                                     boost-optional boost-property-tree boost-system `
+                                     boost-thread boost-uuid thrift openssl
