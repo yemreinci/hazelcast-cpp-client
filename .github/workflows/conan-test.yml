@@ -20,4 +20,4 @@ jobs:
 
       - name: Install deps
         run: |
-          conan install . 
+          conan install . --build=thrift
