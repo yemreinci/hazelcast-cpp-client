@@ -1,0 +1,5 @@
+[requires]
+openssl/1.1.1k
+boost/1.76.0
+thrift/0.13.0
+

@@ -1,0 +1,23 @@
+name: vcpkg-test
+
+on: [push]
+
+jobs:
+  vcpkg-test:
+    
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Conan
+        run: |
+          pip install conan
+
+      - name: Dump conanfile.txt
+        shell: bash
+        run: |
+          cat conanfile.txt
+
+      - name: Install deps
+        run: |
+          conan install . 
