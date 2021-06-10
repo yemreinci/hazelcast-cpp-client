@@ -16,7 +16,10 @@
 #pragma once
 
 #include <string>
-#include <boost/asio.hpp>
+
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/streambuf.hpp>
 
 #include "hazelcast/util/export.h"
 

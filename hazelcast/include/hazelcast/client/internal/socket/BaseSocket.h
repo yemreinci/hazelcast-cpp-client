@@ -17,8 +17,16 @@
 
 #include <unordered_map>
 
-#include <boost/asio.hpp>
+#include <boost/asio/io_context.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/use_future.hpp>
+#include <boost/asio/connect.hpp>
+#include <boost/asio/write.hpp>
 #include <boost/format.hpp>
+
+#ifdef HZ_BUILD_WITH_SSL
+#include <boost/asio/ssl/stream.hpp>
+#endif
 
 #include "hazelcast/client/socket.h"
 #include "hazelcast/client/connection/Connection.h"

@@ -15,7 +15,7 @@
  */
 #pragma once
 
-#include <boost/asio.hpp>
+#include <boost/asio/io_context_strand.hpp>
 
 #include "hazelcast/client/config/socket_options.h"
 #include "hazelcast/client/address.h"

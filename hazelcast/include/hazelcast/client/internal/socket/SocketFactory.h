@@ -19,10 +19,12 @@
 
 #include "hazelcast/util/export.h"
 
+#include <boost/asio/io_context.hpp>
+#include <boost/asio/ip/tcp.hpp>
+
 #ifdef HZ_BUILD_WITH_SSL
 
-#include <boost/asio.hpp>
-#include <boost/asio/ssl.hpp>
+#include <boost/asio/ssl/context.hpp>
 
 #endif // HZ_BUILD_WITH_SSL
 

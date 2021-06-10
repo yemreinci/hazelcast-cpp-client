@@ -29,10 +29,15 @@
 #include <mutex>
 #include <sstream>
 #include <thread>
+#include <condition_variable>
 
 #include <boost/concept_check.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/asio/connect.hpp>
+#include <boost/asio/read.hpp>
+#include <boost/asio/read_until.hpp>
+#include <boost/asio/write.hpp>
 
 #ifdef HZ_BUILD_WITH_SSL
 #include <boost/asio/io_service.hpp>

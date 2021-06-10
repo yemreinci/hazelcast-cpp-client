@@ -17,8 +17,9 @@
 
 #ifdef HZ_BUILD_WITH_SSL
 
-#include <boost/asio.hpp>
-#include <boost/asio/ssl.hpp>
+#include <boost/asio/io_context.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/ssl/context.hpp>
 
 #include "hazelcast/client/internal/socket/BaseSocket.h"
 
